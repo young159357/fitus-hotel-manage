@@ -1,0 +1,37 @@
+import sqlite3
+con = sqlite3.connect("data.db")
+cur = con.cursor()
+
+# drop everything
+cur.execute("DROP TABLE IF EXISTS HOTEL")
+cur.execute("DROP TABLE IF EXISTS USER")
+cur.execute("DROP TABLE IF EXISTS PERMISSION")
+cur.execute("DROP TABLE IF EXISTS ROOM")
+cur.execute("DROP TABLE IF EXISTS ROOM_LOG")
+cur.execute("DROP TABLE IF EXISTS ROOM_PERMISSION")
+cur.execute("DROP TABLE IF EXISTS USER_PERMISSION")
+
+# Enable foreign keys
+cur.execute("PRAGMA foreign_keys = ON")
+
+#create HOTEL table with Hotel ID as KEY, Services, Location
+cur.execute("CREATE TABLE IF NOT EXISTS HOTEL (HOTEL_ID TEXT PRIMARY KEY, SERVICES TEXT, LOCATION TEXT)")
+
+#create USER table with User ID as KEY, Name, DOB, Email, Phone, CCCD
+cur.execute("CREATE TABLE IF NOT EXISTS USER (USER_ID TEXT PRIMARY KEY, NAME TEXT, DOB TEXT, EMAIL TEXT, PHONE TEXT, CCCD TEXT)")
+
+#create PERMISSION table with PermissionID as KEY, PermissionName
+cur.execute("CREATE TABLE IF NOT EXISTS PERMISSION (PERMISSION_ID TEXT PRIMARY KEY, PERMISSION_NAME TEXT)")
+
+#create ROOM table with RoomID as KEY, HotelID referencing HotelID in HOTEL table, RoomType, RoomPrice, NumOfBeds
+cur.execute("CREATE TABLE IF NOT EXISTS ROOM (ROOM_ID TEXT PRIMARY KEY, HOTEL_ID TEXT, ROOM_TYPE TEXT, ROOM_PRICE TEXT, NUM_OF_BEDS TEXT, FOREIGN KEY(HOTEL_ID) REFERENCES HOTEL(HOTEL_ID))")
+
+#create RoomLog table with LogID as KEY, RoomID referencing RoomID in ROOM table, UserID referencing UserID in USER table, DateFrom, DateTo
+cur.execute("CREATE TABLE IF NOT EXISTS ROOM_LOG (LOG_ID TEXT PRIMARY KEY, ROOM_ID TEXT, USER_ID TEXT, DATE_FROM TEXT, DATE_TO TEXT, FOREIGN KEY(ROOM_ID) REFERENCES ROOM(ROOM_ID), FOREIGN KEY(USER_ID) REFERENCES USER(USER_ID))")
+
+#create Room_Permission table with RoomID referencing ROOM table, PermissionID referencing PERMISSION table
+cur.execute("CREATE TABLE IF NOT EXISTS ROOM_PERMISSION (ROOM_ID TEXT, PERMISSION_ID TEXT, FOREIGN KEY(ROOM_ID) REFERENCES ROOM(ROOM_ID), FOREIGN KEY(PERMISSION_ID) REFERENCES PERMISSION(PERMISSION_ID))")
+
+#create User_Permission table with UserID referencing UserID in USER table, PermissionID referencing PermissionID in PERMISSION table
+cur.execute("CREATE TABLE IF NOT EXISTS USER_PERMISSION (USER_ID TEXT, PERMISSION_ID TEXT, FOREIGN KEY(USER_ID) REFERENCES USER(USER_ID), FOREIGN KEY(PERMISSION_ID) REFERENCES PERMISSION(PERMISSION_ID))")
+
