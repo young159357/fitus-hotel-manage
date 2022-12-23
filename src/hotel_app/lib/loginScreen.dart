@@ -1,9 +1,5 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
-import 'package:hotel_app/Admin.dart';
-import 'package:hotel_app/User.dart';
-import 'package:hotel_app/Staff.dart';
-import 'package:hotel_app/Client.dart';
 
 //login screen
 class Login extends StatelessWidget {
@@ -97,30 +93,6 @@ class _LoginState extends State<LoginState> {
                   onPressed: () {
                     debugPrint(nameController.text);
                     debugPrint(passwordController.text);
-                    if (nameController.text == 'admin' && passwordController.text == 'admin') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const AdminScreen()),
-                      );
-                    }
-                    if (nameController.text == 'user' && passwordController.text == 'user') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const UserScreen()),
-                      );
-                    }
-                    if (nameController.text == 'staff' && passwordController.text == 'staff') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const StaffPage()),
-                      );
-                    }
-                    if (nameController.text == 'user1' && passwordController.text == 'user1') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const ClientScreen()),
-                      );
-                    }
                   },
                 )
             ),
