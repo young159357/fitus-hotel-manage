@@ -7,4 +7,3 @@ import './Client.dart';
 //import './Staff.dart';
 
 void main() => runApp(const ClientScreen());
-
