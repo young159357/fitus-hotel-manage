@@ -8,13 +8,13 @@ class StaffScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: routeName,
-      home: MyHomePage(),
+      home: StaffHomePage(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  MyHomePage({Key? key}) : super(key: key);
+class StaffHomePage extends StatelessWidget {
+  StaffHomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

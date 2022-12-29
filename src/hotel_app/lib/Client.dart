@@ -10,13 +10,13 @@ class ClientScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: routeName,
-      home: MyHomePage(),
+      home: ClientHomePage(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  MyHomePage({Key? key}) : super(key: key);
+class ClientHomePage extends StatelessWidget {
+  ClientHomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class MyHomePage extends StatelessWidget {
                 Tab(text: "Profile"),
               ],
             ),
-          title: const Text('Hotel App User Screen'),
+            title: const Text('Hotel App User Screen'),
           ),
           body: const TabBarView(
             children: [homeScreen(), historyScreen(), profileScreen()],
@@ -119,7 +119,7 @@ class _profileScreen extends State<profileScreen> {
     return Scaffold(
         body: Center(
       child: Container(
-      padding: const EdgeInsets.fromLTRB(30, 40, 30, 0),
+        padding: const EdgeInsets.fromLTRB(30, 40, 30, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           // ignore: prefer_const_literals_to_create_immutables
