@@ -29,7 +29,7 @@ class MyHomePage extends StatelessWidget {
                 Tab(text: "Profile"),
               ],
             ),
-            title: const Text('Flutter Tabs Example'),
+            title: const Text('Client'),
           ),
           body: const TabBarView(
             children: [homeScreen(), historyScreen(), profileScreen()],
@@ -84,7 +84,12 @@ class _homeScreen extends State<homeScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             Text("description"),
-                            Text("detail"),
+                            ElevatedButton(
+                                onPressed: () => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const bookRoomScreen())),
+                                child: Text("Detail")),
                           ],
                         ),
                       ),
@@ -112,28 +117,106 @@ class _profileScreen extends State<profileScreen> {
     return Scaffold(
         body: Center(
       child: Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.fromLTRB(30, 40, 30, 0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          // ignore: prefer_const_literals_to_create_immutables
           children: <Widget>[
-            CircleAvatar(
-              radius: 60,
+            const Center(
+              child: CircleAvatar(
+                backgroundColor: Colors.blue,
+                radius: 50,
+              ),
             ),
-            SizedBox(
-              height: 20,
+            const Divider(
+              height: 60,
+              color: Colors.grey,
             ),
-            Text("name"),
-            Text("example@gmail.com"),
-            SizedBox(
-              height: 20,
+            const Text(
+              'Name',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
             ),
-            ElevatedButton(
-                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const updateProfileScreen())),
-                child: Text("Edit Profile")),
-            SizedBox(
-              height: 300,
+            const Text(
+              'John Doe',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
             ),
-            ElevatedButton(onPressed: () {}, child: Text("Logout"))
+            const SizedBox(
+              height: 30,
+            ),
+            const Text(
+              'Actor',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+            const Text(
+              'Admin',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            const Text(
+              'Email',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+            const Text(
+              'nls@fitus.edu.vn',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            const Text(
+              'Phone',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+            const Text(
+              '0123456789',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            Center(
+              child: ElevatedButton(
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const updateProfileScreen())),
+                  child: const Text("Edit Profile")),
+            ),
+            const SizedBox(
+              height: 130,
+            ),
+            Center(
+              child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const updateProfileScreen()),
+                    );
+                  },
+                  child: const Text("Logout")),
+            ),
           ],
         ),
       ),
@@ -206,16 +289,62 @@ class _updateProfileScreen extends State<updateProfileScreen> {
 
 class bookRoomScreen extends StatefulWidget {
   const bookRoomScreen({Key? key}) : super(key: key);
-
   @override
   State<bookRoomScreen> createState() => _bookRoomScreen();
 }
 
 class _bookRoomScreen extends State<bookRoomScreen> {
+  List<bool> temp1 = [false, false, false, false, false];
+
+  bool temp = false;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(child: Text("hello world")),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        title: Text("Room"),
+      ),
+      body: Center(
+        child: Container(
+            padding: EdgeInsets.all(10),
+            child: Column(children: <Widget>[
+              Container(
+                height: 150.0,
+                color: Colors.transparent,
+                child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                    child: new Center(
+                      child: new Text(
+                        "Room image",
+                        style: TextStyle(color: Colors.white, fontSize: 22),
+                        textAlign: TextAlign.center,
+                      ),
+                    )),
+              ),
+              Container(
+                child: Text('description'),
+              ),
+              for (int i = 0; i < 5; i++)
+                CheckboxListTile(
+                  title: Text('Service'),
+                  value: temp1.elementAt(i),
+                  onChanged: ((bool? value) {
+                    setState(() {
+                      temp1[i] = value!;
+                    });
+                  }),
+                ),
+              Container(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  child: const Text('Book'),
+                ),
+              ),
+            ])),
+      ),
     );
   }
 }
