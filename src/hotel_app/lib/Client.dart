@@ -10,13 +10,13 @@ class ClientScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: routeName,
-      home: MyHomePage(),
+      home: ClientHomePage(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  MyHomePage({Key? key}) : super(key: key);
+class ClientHomePage extends StatelessWidget {
+  ClientHomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +86,12 @@ class _homeScreen extends State<homeScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             Text("description"),
-                            Text("detail"),
+                            ElevatedButton(
+                                onPressed: () => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const bookRoomScreen())),
+                                child: Text("Detail")),
                           ],
                         ),
                       ),
@@ -114,66 +119,6 @@ class _profileScreen extends State<profileScreen> {
     return Scaffold(
         body: Center(
       child: Container(
-        /*padding: EdgeInsets.all(10),
-        child: Column(
-          children: <Widget>[
-            const CircleAvatar(
-              radius: 60,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            const Text("name"),
-            const Text("example@gmail.com"),
-            const SizedBox(
-              height: 20,
-            ),
-            const Text(
-              'Actor',
-              style: TextStyle(
-                color: Colors.grey,
-              ),
-            ),
-            const Text(
-              'Admin',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-            const SizedBox(height: 30,),
-            const Text(
-              'Phone',
-              style: TextStyle(
-                color: Colors.grey,
-              ),
-            ),
-            const Text(
-              '0123456789',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-            ElevatedButton(
-                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const updateProfileScreen())),
-                child: const Text("Edit Profile")),
-            const SizedBox(
-              height: 200,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Login()),
-                );
-              }, 
-              child: const Text("Logout"))
-          ],
-        ),*/
         padding: const EdgeInsets.fromLTRB(30, 40, 30, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,7 +127,7 @@ class _profileScreen extends State<profileScreen> {
             const Center(
               child: CircleAvatar(
                 backgroundColor: Colors.blue,
-                radius: 40,
+                radius: 50,
               ),
             ),
             const Divider(
@@ -203,7 +148,9 @@ class _profileScreen extends State<profileScreen> {
                 fontSize: 18,
               ),
             ),
-            const SizedBox(height: 30,),
+            const SizedBox(
+              height: 30,
+            ),
             const Text(
               'Actor',
               style: TextStyle(
@@ -218,7 +165,9 @@ class _profileScreen extends State<profileScreen> {
                 fontSize: 18,
               ),
             ),
-            const SizedBox(height: 30,),
+            const SizedBox(
+              height: 30,
+            ),
             const Text(
               'Email',
               style: TextStyle(
@@ -233,7 +182,9 @@ class _profileScreen extends State<profileScreen> {
                 fontSize: 18,
               ),
             ),
-            const SizedBox(height: 30,),
+            const SizedBox(
+              height: 30,
+            ),
             const Text(
               'Phone',
               style: TextStyle(
@@ -247,24 +198,26 @@ class _profileScreen extends State<profileScreen> {
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
-            ), 
-            Center(
-              child: ElevatedButton(
-                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const updateProfileScreen())),
-                child: const Text("Edit Profile")),
             ),
-            const SizedBox(height: 130,),
             Center(
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Login()),
-                  );
-                }, 
-                child: const Text("Logout")
-              ),
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const updateProfileScreen())),
+                  child: const Text("Edit Profile")),
+            ),
+            const SizedBox(
+              height: 130,
+            ),
+            Center(
+              child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const updateProfileScreen()),
+                    );
+                  },
+                  child: const Text("Logout")),
             ),
           ],
         ),
@@ -338,16 +291,62 @@ class _updateProfileScreen extends State<updateProfileScreen> {
 
 class bookRoomScreen extends StatefulWidget {
   const bookRoomScreen({Key? key}) : super(key: key);
-
   @override
   State<bookRoomScreen> createState() => _bookRoomScreen();
 }
 
 class _bookRoomScreen extends State<bookRoomScreen> {
+  List<bool> temp1 = [false, false, false, false, false];
+
+  bool temp = false;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(child: Text("hello world")),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        title: Text("Room"),
+      ),
+      body: Center(
+        child: Container(
+            padding: EdgeInsets.all(10),
+            child: Column(children: <Widget>[
+              Container(
+                height: 150.0,
+                color: Colors.transparent,
+                child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                    child: new Center(
+                      child: new Text(
+                        "Room image",
+                        style: TextStyle(color: Colors.white, fontSize: 22),
+                        textAlign: TextAlign.center,
+                      ),
+                    )),
+              ),
+              Container(
+                child: Text('description'),
+              ),
+              for (int i = 0; i < 5; i++)
+                CheckboxListTile(
+                  title: Text('Service'),
+                  value: temp1.elementAt(i),
+                  onChanged: ((bool? value) {
+                    setState(() {
+                      temp1[i] = value!;
+                    });
+                  }),
+                ),
+              Container(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  child: const Text('Book'),
+                ),
+              ),
+            ])),
+      ),
     );
   }
 }

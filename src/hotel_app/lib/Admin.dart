@@ -17,7 +17,7 @@ class AdminScreen extends StatelessWidget {
     return MaterialApp(
       title: routeName,
       home: AdminPage(),
-    );  
+    );
   }
 }
 
@@ -49,23 +49,25 @@ class AdminPage extends StatelessWidget {
                     title: Text('Name'),
                     subtitle: Text('Email'),
                     trailing: ElevatedButton(
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-                      child: Icon(Icons.delete),
-                      onPressed:(){
-                        /*persons.removeWhere((element){
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue),
+                        child: Icon(Icons.delete),
+                        onPressed: () {
+                          /*persons.removeWhere((element){
                           return element.id = person.id
                         });
                         setState((){
 
                         });*/
-                      }
-                    ),
+                        }),
                   ),
                 ),
               ),
-            
+
             //Staff List
-            const SizedBox(height: 30,),
+            const SizedBox(
+              height: 30,
+            ),
             const Text(
               'Staff List',
               style: TextStyle(
@@ -81,17 +83,17 @@ class AdminPage extends StatelessWidget {
                     title: Text('Name'),
                     subtitle: Text('Email'),
                     trailing: ElevatedButton(
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-                      child: Icon(Icons.delete),
-                      onPressed:(){
-                        /*persons.removeWhere((element){
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue),
+                        child: Icon(Icons.delete),
+                        onPressed: () {
+                          /*persons.removeWhere((element){
                           return element.id = person.id
                         });
                         setState((){
 
                         });*/
-                      }
-                    ),
+                        }),
                   ),
                 ),
               ),
@@ -108,23 +110,13 @@ class AdminPage extends StatelessWidget {
               ),
               child: Text('Hotel App Admin Screen'),
             ),
-            /*ListTile(
-              leading: const Icon(Icons.apps_outlined),
-              title: const Text('Staff Screen'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const StaffPage()),
-                );
-              },
-            ),*/
             ListTile(
               leading: const Icon(Icons.apps_outlined),
               title: const Text('User Screen'),
-              onTap: (){
+              onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MyHomePage()),
+                  MaterialPageRoute(builder: (context) => ClientHomePage()),
                 );
               },
             ),
@@ -139,18 +131,17 @@ class AdminPage extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Logout'),
-              onTap: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Login()),
-                );
-              }
-            ),
+                leading: const Icon(Icons.logout),
+                title: const Text('Logout'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Login()),
+                  );
+                }),
           ],
         ),
       ),
-    ); 
+    );
   }
 }
