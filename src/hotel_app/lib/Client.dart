@@ -1,6 +1,8 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
 
+import './loginScreen.dart';
+
 class ClientScreen extends StatelessWidget {
   const ClientScreen({Key? key}) : super(key: key);
   static const String routeName = '/ClientScreen';
@@ -29,7 +31,7 @@ class MyHomePage extends StatelessWidget {
                 Tab(text: "Profile"),
               ],
             ),
-            title: const Text('Flutter Tabs Example'),
+            title: const Text('Hotel App User Screen'),
           ),
           body: const TabBarView(
             children: [homeScreen(), historyScreen(), profileScreen()],
@@ -58,7 +60,7 @@ class _homeScreen extends State<homeScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
                     onChanged: (value) {},
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         labelText: "Search",
                         hintText: "Search",
                         prefixIcon: Icon(Icons.search),
@@ -112,28 +114,158 @@ class _profileScreen extends State<profileScreen> {
     return Scaffold(
         body: Center(
       child: Container(
-        padding: EdgeInsets.all(10),
+        /*padding: EdgeInsets.all(10),
         child: Column(
           children: <Widget>[
-            CircleAvatar(
+            const CircleAvatar(
               radius: 60,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            Text("name"),
-            Text("example@gmail.com"),
-            SizedBox(
+            const Text("name"),
+            const Text("example@gmail.com"),
+            const SizedBox(
               height: 20,
+            ),
+            const Text(
+              'Actor',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+            const Text(
+              'Admin',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            const SizedBox(height: 30,),
+            const Text(
+              'Phone',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+            const Text(
+              '0123456789',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
             ),
             ElevatedButton(
                 onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => const updateProfileScreen())),
-                child: Text("Edit Profile")),
-            SizedBox(
-              height: 300,
+                child: const Text("Edit Profile")),
+            const SizedBox(
+              height: 200,
             ),
-            ElevatedButton(onPressed: () {}, child: Text("Logout"))
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Login()),
+                );
+              }, 
+              child: const Text("Logout"))
+          ],
+        ),*/
+        padding: const EdgeInsets.fromLTRB(30, 40, 30, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          // ignore: prefer_const_literals_to_create_immutables
+          children: <Widget>[
+            const Center(
+              child: CircleAvatar(
+                backgroundColor: Colors.blue,
+                radius: 40,
+              ),
+            ),
+            const Divider(
+              height: 60,
+              color: Colors.grey,
+            ),
+            const Text(
+              'Name',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+            const Text(
+              'John Doe',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            const SizedBox(height: 30,),
+            const Text(
+              'Actor',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+            const Text(
+              'Admin',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            const SizedBox(height: 30,),
+            const Text(
+              'Email',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+            const Text(
+              'nls@fitus.edu.vn',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            const SizedBox(height: 30,),
+            const Text(
+              'Phone',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+            const Text(
+              '0123456789',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ), 
+            Center(
+              child: ElevatedButton(
+                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const updateProfileScreen())),
+                child: const Text("Edit Profile")),
+            ),
+            const SizedBox(height: 130,),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Login()),
+                  );
+                }, 
+                child: const Text("Logout")
+              ),
+            ),
           ],
         ),
       ),

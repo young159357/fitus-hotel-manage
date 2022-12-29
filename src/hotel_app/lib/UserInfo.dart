@@ -1,5 +1,6 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
+import './Client.dart';
 
 class UserInfo extends StatefulWidget {
   const UserInfo({Key? key}) : super(key: key);
@@ -90,6 +91,12 @@ class _UserInfoState extends State<UserInfo> {
                 fontSize: 18,
               ),
             ), 
+            Center(
+              child: ElevatedButton(
+                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const updateProfileScreen())),
+                child: const Text("Edit Profile")),
+            ),
           ],
         ),
       )
