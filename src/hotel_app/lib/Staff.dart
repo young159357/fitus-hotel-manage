@@ -294,15 +294,7 @@ class detailScreen extends StatefulWidget {
 
 class _detailScreen extends State<detailScreen> {
   List<bool> temp1 = [false, false, false, false, false];
-  List<String> temp2 = [
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ];
+  List<String> temp2 = ["", "", "", "", "", "", ""];
   @override
   Widget build(BuildContext context) {
     return Scaffold(

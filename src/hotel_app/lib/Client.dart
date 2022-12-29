@@ -1,6 +1,8 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
 
+import './loginScreen.dart';
+
 class ClientScreen extends StatelessWidget {
   const ClientScreen({Key? key}) : super(key: key);
   static const String routeName = '/ClientScreen';
@@ -29,7 +31,7 @@ class MyHomePage extends StatelessWidget {
                 Tab(text: "Profile"),
               ],
             ),
-            title: const Text('Client'),
+          title: const Text('Hotel App User Screen'),
           ),
           body: const TabBarView(
             children: [homeScreen(), historyScreen(), profileScreen()],
@@ -58,7 +60,7 @@ class _homeScreen extends State<homeScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
                     onChanged: (value) {},
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         labelText: "Search",
                         hintText: "Search",
                         prefixIcon: Icon(Icons.search),
@@ -117,7 +119,7 @@ class _profileScreen extends State<profileScreen> {
     return Scaffold(
         body: Center(
       child: Container(
-        padding: const EdgeInsets.fromLTRB(30, 40, 30, 0),
+      padding: const EdgeInsets.fromLTRB(30, 40, 30, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           // ignore: prefer_const_literals_to_create_immutables
