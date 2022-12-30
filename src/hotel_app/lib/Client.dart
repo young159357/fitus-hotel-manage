@@ -199,6 +199,9 @@ class _profileScreen extends State<profileScreen> {
                 fontSize: 18,
               ),
             ),
+            const SizedBox(
+              height: 20,
+            ),
             Center(
               child: ElevatedButton(
                   onPressed: () => Navigator.of(context).push(MaterialPageRoute(
@@ -206,7 +209,7 @@ class _profileScreen extends State<profileScreen> {
                   child: const Text("Edit Profile")),
             ),
             const SizedBox(
-              height: 130,
+              height: 10,
             ),
             Center(
               child: ElevatedButton(
@@ -214,7 +217,7 @@ class _profileScreen extends State<profileScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const updateProfileScreen()),
+                          builder: (context) => const Login()),
                     );
                   },
                   child: const Text("Logout")),

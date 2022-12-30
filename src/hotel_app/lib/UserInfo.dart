@@ -91,6 +91,9 @@ class _UserInfoState extends State<UserInfo> {
                 fontSize: 18,
               ),
             ), 
+            const SizedBox(
+              height: 20,
+            ),
             Center(
               child: ElevatedButton(
                 onPressed: () => Navigator.of(context).push(MaterialPageRoute(

@@ -1,5 +1,6 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
+import './loginScreen.dart';
 
 class StaffScreen extends StatelessWidget {
   const StaffScreen({Key? key}) : super(key: key);
@@ -72,7 +73,7 @@ class _homeScreen extends State<homeScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
                     onChanged: (value) {},
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         labelText: "Search",
                         hintText: "Search",
                         prefixIcon: Icon(Icons.search),
@@ -91,19 +92,19 @@ class _homeScreen extends State<homeScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    Text("Image"),
+                    const Text("Image"),
                     Expanded(
                       child: Container(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            Text("description"),
+                            const Text("description"),
                             ElevatedButton(
                                 onPressed: () => Navigator.of(context).push(
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             const detailScreen())),
-                                child: Text("Edit")),
+                                child: const Text("Edit")),
                           ],
                         ),
                       ),
@@ -211,6 +212,9 @@ class _profileScreen extends State<profileScreen> {
                 fontSize: 18,
               ),
             ),
+            const SizedBox(
+              height: 20,
+            ),
             Center(
               child: ElevatedButton(
                   onPressed: () => Navigator.of(context).push(MaterialPageRoute(
@@ -218,7 +222,7 @@ class _profileScreen extends State<profileScreen> {
                   child: const Text("Edit Profile")),
             ),
             const SizedBox(
-              height: 130,
+              height: 10,
             ),
             Center(
               child: ElevatedButton(
@@ -226,7 +230,7 @@ class _profileScreen extends State<profileScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const updateProfileScreen()),
+                          builder: (context) => const Login()),
                     );
                   },
                   child: const Text("Logout")),
