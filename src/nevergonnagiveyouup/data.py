@@ -1,4 +1,7 @@
 import sqlite3
+import json
+import os
+
 con = sqlite3.connect("data.db")
 cur = con.cursor()
 
@@ -42,3 +45,36 @@ cur.execute("CREATE TABLE IF NOT EXISTS USER_PERMISSION (USER_ID TEXT, PERMISSIO
 
 #create Login_Info table with UserID referencing UserID in USER table, Username, Password
 cur.execute("CREATE TABLE IF NOT EXISTS LOGIN_INFO (USER_ID TEXT, USERNAME TEXT, PASSWORD TEXT, FOREIGN KEY(USER_ID) REFERENCES USER(USER_ID))")
+
+
+
+#add data
+with open(os.path.join(os.path.dirname(__file__), '..', '..', '.github', 'testcases', 'UsersList.json'), encoding="utf8") as f:
+    traffic = json.load(f)
+
+id = 0
+
+for row in traffic:
+    cur.execute("INSERT INTO USER VALUES (?,?,?,?,?,?,?)", (id, row['Name'], row['Phone'], row['Email'], row['Gender'], row['Birthday'], row['Address']))
+    cur.execute("INSERT INTO LOGIN_INFO VALUES (?,?,?)", (id, row['Username'], row['Password']))
+    id += 1
+
+with open(os.path.join(os.path.dirname(__file__), '..', '..', '.github', 'testcases', 'RoomsList.json'), encoding="utf8") as f:
+    traffic = json.load(f)
+
+HotelList = []
+
+for row in traffic:
+    HotelID = row['Room'][0]
+    if HotelID not in HotelList:
+        HotelList.append(HotelID)
+        cur.execute("INSERT INTO HOTEL VALUES (?,?,?)", (HotelID, "None", "None"))
+    cur.execute("INSERT INTO ROOM VALUES (?,?,?,?)", (row['Room'], row['Room'][0], row['Price'], row['BedNum']))
+    Fur = 4*[None]
+    for i in range(len(row['InRoom'])):
+        Fur[i] = row['InRoom'][i]
+    cur.execute("INSERT INTO FURNITURE VALUES (?,?,?,?,?)", (row['Room'], Fur[0], Fur[1], Fur[2], Fur[3]))
+
+
+con.commit()
+con.close()
