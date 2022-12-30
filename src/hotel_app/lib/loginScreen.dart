@@ -1,12 +1,16 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
+import 'package:hotel_app/Admin.dart';
+import 'package:hotel_app/User.dart';
+import 'package:hotel_app/Staff.dart';
+import 'package:hotel_app/Client.dart';
 
 //login screen
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);
- 
+
   static const String _title = 'Hotel Management System';
- 
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,19 +22,18 @@ class Login extends StatelessWidget {
     );
   }
 }
- 
+
 class LoginState extends StatefulWidget {
   const LoginState({Key? key}) : super(key: key);
- 
+
   @override
   State<LoginState> createState() => _LoginState();
-
 }
- 
+
 class _LoginState extends State<LoginState> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
- 
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -80,10 +83,13 @@ class _LoginState extends State<LoginState> {
                 //forgot password screen
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const ForgotPassword()),
+                  MaterialPageRoute(
+                      builder: (context) => const ForgotPassword()),
                 );
               },
-              child: const Text('Forgot Password',),
+              child: const Text(
+                'Forgot Password',
+              ),
             ),
             Container(
                 height: 50,
@@ -93,9 +99,40 @@ class _LoginState extends State<LoginState> {
                   onPressed: () {
                     debugPrint(nameController.text);
                     debugPrint(passwordController.text);
+                    if (nameController.text == 'admin' &&
+                        passwordController.text == 'admin') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AdminScreen()),
+                      );
+                    }
+                    if (nameController.text == 'user' &&
+                        passwordController.text == 'user') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const UserScreen()),
+                      );
+                    }
+                    if (nameController.text == 'staff' &&
+                        passwordController.text == 'staff') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const StaffScreen()),
+                      );
+                    }
+                    if (nameController.text == 'user1' &&
+                        passwordController.text == 'user1') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ClientScreen()),
+                      );
+                    }
                   },
-                )
-            ),
+                )),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -145,7 +182,7 @@ class ForgotPasswordState extends StatefulWidget {
   State<ForgotPasswordState> createState() => _ForgotPasswordState();
 }
 
-class _ForgotPasswordState extends State<ForgotPasswordState>{
+class _ForgotPasswordState extends State<ForgotPasswordState> {
   TextEditingController emailController = TextEditingController();
 
   @override
@@ -194,8 +231,7 @@ class _ForgotPasswordState extends State<ForgotPasswordState>{
                       MaterialPageRoute(builder: (context) => const Login()),
                     );
                   },
-                )
-            ),
+                )),
             const SizedBox(height: 10.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -247,7 +283,7 @@ class SignUpState extends StatefulWidget {
   State<SignUpState> createState() => _SignUpState();
 }
 
-class _SignUpState extends State<SignUpState>{
+class _SignUpState extends State<SignUpState> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -317,8 +353,7 @@ class _SignUpState extends State<SignUpState>{
                     debugPrint(emailController.text);
                     debugPrint(passwordController.text);
                   },
-                )
-            ),
+                )),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
