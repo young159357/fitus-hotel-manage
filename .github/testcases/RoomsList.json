@@ -1,0 +1,200 @@
+[
+    {
+        "Room": "A101",
+        "BedNum": 2,
+        "InRoom": [
+            "Table"
+        ]
+    },
+    {
+        "Room": "A102",
+        "BedNum": 3,
+        "InRoom": [
+            "TV"
+        ]
+    },
+    {
+        "Room": "A103",
+        "BedNum": 4,
+        "InRoom": [
+            "TV",
+            "Table"
+        ]
+    },
+    {
+        "Room": "A201",
+        "BedNum": 2,
+        "InRoom": [
+            "Table"
+        ]
+    },
+    {
+        "Room": "A202",
+        "BedNum": 3,
+        "InRoom": [
+            "TV"
+        ]
+    },
+    {
+        "Room": "A203",
+        "BedNum": 4,
+        "InRoom": [
+            "TV",
+            "Table"
+        ]
+    },
+    {
+        "Room": "A301",
+        "BedNum": 2,
+        "InRoom": [
+            "Table"
+        ]
+    },
+    {
+        "Room": "A302",
+        "BedNum": 3,
+        "InRoom": [
+            "TV"
+        ]
+    },
+    {
+        "Room": "A303",
+        "BedNum": 4,
+        "InRoom": [
+            "TV",
+            "Table"
+        ]
+    },
+    {
+        "Room": "B101",
+        "BedNum": 2,
+        "InRoom": [
+            "Table"
+        ]
+    },
+    {
+        "Room": "B102",
+        "BedNum": 3,
+        "InRoom": [
+            "TV"
+        ]
+    },
+    {
+        "Room": "B103",
+        "BedNum": 4,
+        "InRoom": [
+            "TV",
+            "Table"
+        ]
+    },
+    {
+        "Room": "B201",
+        "BedNum": 2,
+        "InRoom": [
+            "Table"
+        ]
+    },
+    {
+        "Room": "B202",
+        "BedNum": 3,
+        "InRoom": [
+            "TV"
+        ]
+    },
+    {
+        "Room": "B203",
+        "BedNum": 4,
+        "InRoom": [
+            "TV",
+            "Table"
+        ]
+    },
+    {
+        "Room": "B301",
+        "BedNum": 2,
+        "InRoom": [
+            "Table"
+        ]
+    },
+    {
+        "Room": "B302",
+        "BedNum": 3,
+        "InRoom": [
+            "TV"
+        ]
+    },
+    {
+        "Room": "B303",
+        "BedNum": 4,
+        "InRoom": [
+            "TV",
+            "Table"
+        ]
+    },
+    {
+        "Room": "C101",
+        "BedNum": 2,
+        "InRoom": [
+            "Table"
+        ]
+    },
+    {
+        "Room": "C102",
+        "BedNum": 3,
+        "InRoom": [
+            "TV"
+        ]
+    },
+    {
+        "Room": "C103",
+        "BedNum": 4,
+        "InRoom": [
+            "TV",
+            "Table"
+        ]
+    },
+    {
+        "Room": "C201",
+        "BedNum": 2,
+        "InRoom": [
+            "Table"
+        ]
+    },
+    {
+        "Room": "C202",
+        "BedNum": 3,
+        "InRoom": [
+            "TV"
+        ]
+    },
+    {
+        "Room": "C203",
+        "BedNum": 4,
+        "InRoom": [
+            "TV",
+            "Table"
+        ]
+    },
+    {
+        "Room": "C301",
+        "BedNum": 2,
+        "InRoom": [
+            "Table"
+        ]
+    },
+    {
+        "Room": "C302",
+        "BedNum": 3,
+        "InRoom": [
+            "TV"
+        ]
+    },
+    {
+        "Room": "C303",
+        "BedNum": 4,
+        "InRoom": [
+            "TV",
+            "Table"
+        ]
+    }
+]
