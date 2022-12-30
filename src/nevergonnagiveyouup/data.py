@@ -19,8 +19,8 @@ cur.execute("DROP TABLE IF EXISTS FURNITURE")
 # Enable foreign keys
 cur.execute("PRAGMA foreign_keys = ON")
 
-#create HOTEL table with Hotel ID as KEY, Services, Location
-cur.execute("CREATE TABLE IF NOT EXISTS HOTEL (HOTEL_ID TEXT PRIMARY KEY, SERVICES TEXT, LOCATION TEXT)")
+#create HOTEL table with Hotel ID as KEY, Name, Location
+cur.execute("CREATE TABLE IF NOT EXISTS HOTEL (HOTEL_ID TEXT PRIMARY KEY, Name TEXT, LOCATION TEXT)")
 
 #create USER table with User ID as KEY, Name, Phone, Email, GENDER, DOB, ADDRESS
 cur.execute("CREATE TABLE IF NOT EXISTS USER (USER_ID TEXT PRIMARY KEY, NAME TEXT, PHONE TEXT, EMAIL TEXT, GENDER TEXT, DOB TEXT,  ADDRESS TEXT)")
@@ -59,16 +59,16 @@ for row in traffic:
     cur.execute("INSERT INTO LOGIN_INFO VALUES (?,?,?)", (id, row['Username'], row['Password']))
     id += 1
 
+with open(os.path.join(os.path.dirname(__file__), '..', '..', '.github', 'testcases', 'HotelsList.json'), encoding="utf8") as f:
+    traffic = json.load(f)
+
+for row in traffic:
+    cur.execute("INSERT INTO HOTEL VALUES (?,?,?)", (row['ID'], row['Name'], row['Address']))
+
 with open(os.path.join(os.path.dirname(__file__), '..', '..', '.github', 'testcases', 'RoomsList.json'), encoding="utf8") as f:
     traffic = json.load(f)
 
-HotelList = []
-
 for row in traffic:
-    HotelID = row['Room'][0]
-    if HotelID not in HotelList:
-        HotelList.append(HotelID)
-        cur.execute("INSERT INTO HOTEL VALUES (?,?,?)", (HotelID, "None", "None"))
     cur.execute("INSERT INTO ROOM VALUES (?,?,?,?)", (row['Room'], row['Room'][0], row['Price'], row['BedNum']))
     Fur = 4*[None]
     for i in range(len(row['InRoom'])):
