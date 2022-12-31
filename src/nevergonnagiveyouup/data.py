@@ -19,8 +19,8 @@ cur.execute("DROP TABLE IF EXISTS FURNITURE")
 # Enable foreign keys
 cur.execute("PRAGMA foreign_keys = ON")
 
-#create HOTEL table with Hotel ID as KEY, Name, Location
-cur.execute("CREATE TABLE IF NOT EXISTS HOTEL (HOTEL_ID TEXT PRIMARY KEY, Name TEXT, LOCATION TEXT)")
+#create HOTEL table with Hotel ID as KEY, NameID, Name, Location
+cur.execute("CREATE TABLE IF NOT EXISTS HOTEL (HOTEL_ID TEXT PRIMARY KEY, NAMEID TEXT, NAME TEXT, LOCATION TEXT)")
 
 #create USER table with User ID as KEY, Name, Phone, Email, GENDER, DOB, ADDRESS
 cur.execute("CREATE TABLE IF NOT EXISTS USER (USER_ID TEXT PRIMARY KEY, NAME TEXT, PHONE TEXT, EMAIL TEXT, GENDER TEXT, DOB TEXT,  ADDRESS TEXT)")
@@ -28,8 +28,8 @@ cur.execute("CREATE TABLE IF NOT EXISTS USER (USER_ID TEXT PRIMARY KEY, NAME TEX
 #create PERMISSION table with PermissionID as KEY, PermissionName
 cur.execute("CREATE TABLE IF NOT EXISTS PERMISSION (PERMISSION_ID TEXT PRIMARY KEY, PERMISSION_NAME TEXT)")
 
-#create ROOM table with RoomID as KEY, HotelID referencing HotelID in HOTEL table, RoomType, RoomPrice, NumOfBeds
-cur.execute("CREATE TABLE IF NOT EXISTS ROOM (ROOM_ID TEXT PRIMARY KEY, HOTEL_ID TEXT, ROOM_PRICE TEXT, NUM_OF_BEDS TEXT, FOREIGN KEY(HOTEL_ID) REFERENCES HOTEL(HOTEL_ID))")
+#create ROOM table with RoomID as KEY, HotelID referencing HotelID in HOTEL table, RoomName, RoomType, RoomPrice, NumOfBeds
+cur.execute("CREATE TABLE IF NOT EXISTS ROOM (ROOM_ID TEXT PRIMARY KEY, HOTEL_ID TEXT, ROOM_NAME TEXT, ROOM_PRICE TEXT, NUM_OF_BEDS TEXT, FOREIGN KEY(HOTEL_ID) REFERENCES HOTEL(HOTEL_ID))")
 
 #create Furniture table with RoomID referencing RoomID in ROOM table, Furniture_1, Furniture_2, Furniture_3, Furniture_4
 cur.execute("CREATE TABLE IF NOT EXISTS FURNITURE (ROOM_ID TEXT, FURNITURE_1 TEXT, FURNITURE_2 TEXT, FURNITURE_3 TEXT, FURNITURE_4 TEXT, FOREIGN KEY(ROOM_ID) REFERENCES ROOM(ROOM_ID))")
@@ -62,18 +62,27 @@ for row in traffic:
 with open(os.path.join(os.path.dirname(__file__), '..', '..', '.github', 'testcases', 'HotelsList.json'), encoding="utf8") as f:
     traffic = json.load(f)
 
+id = 0
 for row in traffic:
-    cur.execute("INSERT INTO HOTEL VALUES (?,?,?)", (row['ID'], row['Name'], row['Address']))
+    cur.execute("INSERT INTO HOTEL VALUES (?,?,?,?)", (id, row['ID'], row['Name'], row['Address']))
+    id += 1
 
 with open(os.path.join(os.path.dirname(__file__), '..', '..', '.github', 'testcases', 'RoomsList.json'), encoding="utf8") as f:
     traffic = json.load(f)
 
+id = 0
 for row in traffic:
-    cur.execute("INSERT INTO ROOM VALUES (?,?,?,?)", (row['Room'], row['Room'][0], row['Price'], row['BedNum']))
+    #find hotel id in HOTEL table
+    cur.execute("SELECT HOTEL_ID FROM HOTEL WHERE NAMEID = ?", (row['Room'][0],))
+    hotel_id = cur.fetchone()[0]
+    cur.execute("INSERT INTO ROOM VALUES (?,?,?,?,?)", (id, hotel_id, row['Room'], row['Price'], row['BedNum']))
+   
     Fur = 4*[None]
     for i in range(len(row['InRoom'])):
         Fur[i] = row['InRoom'][i]
-    cur.execute("INSERT INTO FURNITURE VALUES (?,?,?,?,?)", (row['Room'], Fur[0], Fur[1], Fur[2], Fur[3]))
+    cur.execute("INSERT INTO FURNITURE VALUES (?,?,?,?,?)", (id, Fur[0], Fur[1], Fur[2], Fur[3]))
+
+    id += 1
 
 
 con.commit()
