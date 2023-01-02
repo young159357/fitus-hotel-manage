@@ -1,7 +1,9 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:hotel_app/model/hotel_list.dart';
 import 'package:hotel_app/service/base_client.dart';
-import 'package:hotel_app/service/remote_service.dart';
+//import 'package:hotel_app/service/remote_service.dart';
 import './loginScreen.dart';
 
 class ClientScreen extends StatelessWidget {
@@ -115,7 +117,7 @@ class _homeScreen extends State<homeScreen> {
                                       .catchError((err) {});
                                   if (response == null) return;
                                   var hotels = hotelListFromJson(response);
-                                  print(hotels.length.toString());
+                                  debugPrint(hotels.length.toString());
                                 },
                                 child: Text("Detail")),
                           ],
