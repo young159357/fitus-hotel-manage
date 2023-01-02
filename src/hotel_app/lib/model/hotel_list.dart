@@ -39,13 +39,13 @@ class Room {
     required this.roomId,
     required this.price,
     required this.bedNums,
-    this.furnitures,
+    required this.furnitures,
   });
 
   String roomId;
   String price;
   String bedNums;
-  List<String>? furnitures;
+  List<String> furnitures;
 
   factory Room.fromJson(Map<String, dynamic> json) => Room(
         roomId: json["RoomID"],
