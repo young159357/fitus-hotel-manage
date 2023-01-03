@@ -1,10 +1,17 @@
+from database_utils import Database
 from fastapi import FastAPI, Response
-
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from database_utils import Database
-
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 data = Database("data.db")
 
