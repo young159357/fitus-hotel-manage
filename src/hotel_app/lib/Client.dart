@@ -1,6 +1,9 @@
-// ignore: file_names
-import 'package:flutter/material.dart';
+// ignore_for_file: file_names
 
+import 'package:flutter/material.dart';
+import 'package:hotel_app/model/hotel_list.dart';
+import 'package:hotel_app/service/base_client.dart';
+//import 'package:hotel_app/service/remote_service.dart';
 import './loginScreen.dart';
 
 class ClientScreen extends StatelessWidget {
@@ -48,6 +51,23 @@ class homeScreen extends StatefulWidget {
 }
 
 class _homeScreen extends State<homeScreen> {
+  // List<RoomList>? rooms;
+  // var isloaded = false;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getData();
+  // }
+
+  // getData() async {
+  //   rooms = await RemotesService().getRoomList();
+  //   if (rooms != null) {
+  //     setState(() {
+  //       isloaded = true;
+  //     });
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,12 +105,20 @@ class _homeScreen extends State<homeScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            Text("description"),
+                            // Text(rooms![i].room),
                             ElevatedButton(
-                                onPressed: () => Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const bookRoomScreen())),
+                                // onPressed: () => Navigator.of(context).push(
+                                //     MaterialPageRoute(
+                                //         builder: (context) =>
+                                //             const bookRoomScreen())),
+                                onPressed: () async {
+                                  var response = await BaseClient()
+                                      .get('/hotels_info')
+                                      .catchError((err) {});
+                                  if (response == null) return;
+                                  var hotels = hotelListFromJson(response);
+                                  debugPrint(hotels.length.toString());
+                                },
                                 child: Text("Detail")),
                           ],
                         ),
@@ -216,8 +244,7 @@ class _profileScreen extends State<profileScreen> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const Login()),
+                      MaterialPageRoute(builder: (context) => const Login()),
                     );
                   },
                   child: const Text("Logout")),

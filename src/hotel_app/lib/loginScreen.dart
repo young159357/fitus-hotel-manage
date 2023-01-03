@@ -1,10 +1,11 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:hotel_app/Admin.dart';
-import 'package:hotel_app/User.dart';
-import 'package:hotel_app/Staff.dart';
-import 'package:hotel_app/Client.dart';
+//import 'package:hotel_app/Staff.dart';
+//import 'package:hotel_app/Client.dart';
 
+import 'package:hotel_app/model/user_list.dart';
+import 'package:hotel_app/service/remote_service.dart';
 //login screen
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);
@@ -33,6 +34,26 @@ class LoginState extends StatefulWidget {
 class _LoginState extends State<LoginState> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  List<UserProfile>? users;
+  var isloaded = false;
+  var check = false;
+  int number = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    users = await RemotesService().getUserProfile();
+    if (users != null) {
+      setState(() {
+        isloaded = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,39 +120,22 @@ class _LoginState extends State<LoginState> {
                   onPressed: () {
                     debugPrint(nameController.text);
                     debugPrint(passwordController.text);
-                    if (nameController.text == 'admin' &&
-                        passwordController.text == 'admin') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AdminScreen()),
-                      );
+                    while (!check){
+                      if (nameController.text == users![number].username){
+                        if (passwordController.text == users![number].password){
+                          check = true;
+                        }
+                      }
+                      number++;
                     }
-                    if (nameController.text == 'user' &&
-                        passwordController.text == 'user') {
+                    if (check){
                       Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const UserScreen()),
-                      );
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const AdminScreen()),
+                            );
                     }
-                    if (nameController.text == 'staff' &&
-                        passwordController.text == 'staff') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const StaffScreen()),
-                      );
-                    }
-                    if (nameController.text == 'user1' &&
-                        passwordController.text == 'user1') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ClientScreen()),
-                      );
-                    }
-                  },
+                  }
                 )),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
