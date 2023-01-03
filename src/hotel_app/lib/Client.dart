@@ -1,10 +1,9 @@
-// ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 import 'package:hotel_app/model/hotel_list.dart';
 import 'package:hotel_app/service/base_client.dart';
-//import 'package:hotel_app/service/remote_service.dart';
+import 'package:hotel_app/service/remote_service.dart';
 import './loginScreen.dart';
+import 'dart:async';
 
 class ClientScreen extends StatelessWidget {
   const ClientScreen({Key? key}) : super(key: key);
@@ -43,6 +42,7 @@ class ClientHomePage extends StatelessWidget {
   }
 }
 
+// HOME Screen
 class homeScreen extends StatefulWidget {
   const homeScreen({Key? key}) : super(key: key);
 
@@ -51,22 +51,22 @@ class homeScreen extends StatefulWidget {
 }
 
 class _homeScreen extends State<homeScreen> {
-  // List<RoomList>? rooms;
-  // var isloaded = false;
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   getData();
-  // }
+  List<HotelList>? hotels;
+  var isloaded = false;
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
 
-  // getData() async {
-  //   rooms = await RemotesService().getRoomList();
-  //   if (rooms != null) {
-  //     setState(() {
-  //       isloaded = true;
-  //     });
-  //   }
-  // }
+  getData() async {
+    hotels = await RemotesService().getRoomList();
+    if (hotels != null) {
+      setState(() {
+        isloaded = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +92,7 @@ class _homeScreen extends State<homeScreen> {
               ],
             ),
           ),
-          for (int i = 0; i < 5; i++)
+          for (int i = 0; i < hotels!.length; i++)
             Container(
               height: 200,
               child: Card(
@@ -105,20 +105,15 @@ class _homeScreen extends State<homeScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            // Text(rooms![i].room),
+                            Text(hotels![i].hotelName),
+                            Text(hotels![i].hotelAddress),
                             ElevatedButton(
-                                // onPressed: () => Navigator.of(context).push(
-                                //     MaterialPageRoute(
-                                //         builder: (context) =>
-                                //             const bookRoomScreen())),
-                                onPressed: () async {
-                                  var response = await BaseClient()
-                                      .get('/hotels_info')
-                                      .catchError((err) {});
-                                  if (response == null) return;
-                                  var hotels = hotelListFromJson(response);
-                                  debugPrint(hotels.length.toString());
-                                },
+                                onPressed: (() {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        roomListScreen(rooms: hotels![i].rooms),
+                                  ));
+                                }),
                                 child: Text("Detail")),
                           ],
                         ),
@@ -134,6 +129,147 @@ class _homeScreen extends State<homeScreen> {
   }
 }
 
+class roomListScreen extends StatefulWidget {
+  final List<Room>? rooms;
+
+  const roomListScreen({Key? key, this.rooms}) : super(key: key);
+  @override
+  State<roomListScreen> createState() => _roomListScreen();
+}
+
+class _roomListScreen extends State<roomListScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: ListView(
+        children: <Widget>[
+          Container(
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    onChanged: (value) {},
+                    decoration: const InputDecoration(
+                        labelText: "Search",
+                        hintText: "Search",
+                        prefixIcon: Icon(Icons.search),
+                        border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(25.0)))),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          for (int i = 0; i < widget.rooms!.length; i++)
+            Container(
+              height: 200,
+              child: Card(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Text("Image"),
+                    Expanded(
+                      child: Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Text(widget.rooms![i].roomId),
+                            ElevatedButton(
+                                onPressed: (() {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => bookRoomScreen(
+                                      bookRoom: widget.rooms![i],
+                                    ),
+                                  ));
+                                }),
+                                child: Text("Book")),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class bookRoomScreen extends StatefulWidget {
+  final Room bookRoom;
+
+  const bookRoomScreen({Key? key, required this.bookRoom}) : super(key: key);
+  @override
+  State<bookRoomScreen> createState() => _bookRoomScreen();
+}
+
+class _bookRoomScreen extends State<bookRoomScreen> {
+  // List<bool> temp1 = [false, false, false, false, false];
+
+  bool temp = false;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        title: Text(widget.bookRoom.roomId),
+      ),
+      body: Center(
+        child: Container(
+            padding: EdgeInsets.all(10),
+            child: Column(children: <Widget>[
+              Container(
+                height: 150.0,
+                color: Colors.transparent,
+                child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                    child: new Center(
+                      child: new Text(
+                        "Room image",
+                        style: TextStyle(color: Colors.white, fontSize: 22),
+                        textAlign: TextAlign.center,
+                      ),
+                    )),
+              ),
+              Container(
+                child:
+                    Text("Price: " + widget.bookRoom.price + r" $ Per Night"),
+              ),
+              Container(
+                child: Text("Bed number: " + widget.bookRoom.bedNums),
+              ),
+              for (int i = 0; i < widget.bookRoom.furnitures.length; i++)
+                Container(child: Text(widget.bookRoom.furnitures[i])),
+              // FOR SERVICE
+              // CheckboxListTile(
+              //   title: Text('Service'),
+              //   value: temp1.elementAt(i),
+              //   onChanged: ((bool? value) {
+              //     setState(() {
+              //       temp1[i] = value!;
+              //     });
+              //   }),
+              // ),
+              Container(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  child: const Text('Book'),
+                ),
+              ),
+            ])),
+      ),
+    );
+  }
+}
+
+//PROFILE Screen
 class profileScreen extends StatefulWidget {
   const profileScreen({Key? key}) : super(key: key);
 
@@ -256,6 +392,7 @@ class _profileScreen extends State<profileScreen> {
   }
 }
 
+//HISTORY Screen
 class historyScreen extends StatefulWidget {
   const historyScreen({Key? key}) : super(key: key);
 
@@ -313,68 +450,6 @@ class _updateProfileScreen extends State<updateProfileScreen> {
                   ),
                 ],
               ))
-            ])),
-      ),
-    );
-  }
-}
-
-class bookRoomScreen extends StatefulWidget {
-  const bookRoomScreen({Key? key}) : super(key: key);
-  @override
-  State<bookRoomScreen> createState() => _bookRoomScreen();
-}
-
-class _bookRoomScreen extends State<bookRoomScreen> {
-  List<bool> temp1 = [false, false, false, false, false];
-
-  bool temp = false;
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: Text("Room"),
-      ),
-      body: Center(
-        child: Container(
-            padding: EdgeInsets.all(10),
-            child: Column(children: <Widget>[
-              Container(
-                height: 150.0,
-                color: Colors.transparent,
-                child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                    child: new Center(
-                      child: new Text(
-                        "Room image",
-                        style: TextStyle(color: Colors.white, fontSize: 22),
-                        textAlign: TextAlign.center,
-                      ),
-                    )),
-              ),
-              Container(
-                child: Text('description'),
-              ),
-              for (int i = 0; i < 5; i++)
-                CheckboxListTile(
-                  title: Text('Service'),
-                  value: temp1.elementAt(i),
-                  onChanged: ((bool? value) {
-                    setState(() {
-                      temp1[i] = value!;
-                    });
-                  }),
-                ),
-              Container(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: const Text('Book'),
-                ),
-              ),
             ])),
       ),
     );
