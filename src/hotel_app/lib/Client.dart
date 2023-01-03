@@ -246,6 +246,7 @@ class _bookRoomScreen extends State<bookRoomScreen> {
               ),
               for (int i = 0; i < widget.bookRoom.furnitures.length; i++)
                 Container(child: Text(widget.bookRoom.furnitures[i])),
+              // FOR SERVICE
               // CheckboxListTile(
               //   title: Text('Service'),
               //   value: temp1.elementAt(i),
