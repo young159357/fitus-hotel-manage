@@ -1,5 +1,6 @@
 import sqlite3, json, os
 
+limit = 100
 con = sqlite3.connect("data.db")
 cur = con.cursor()
 
@@ -31,8 +32,8 @@ cur.execute("CREATE TABLE IF NOT EXISTS ROOM (ROOM_ID TEXT PRIMARY KEY, HOTEL_ID
 #create Furniture table with RoomID referencing RoomID in ROOM table, Furniture_1, Furniture_2, Furniture_3, Furniture_4
 cur.execute("CREATE TABLE IF NOT EXISTS FURNITURE (ROOM_ID TEXT, FURNITURE_1 TEXT, FURNITURE_2 TEXT, FURNITURE_3 TEXT, FURNITURE_4 TEXT, FOREIGN KEY(ROOM_ID) REFERENCES ROOM(ROOM_ID))")
 
-#create TransactionLog table with LogID as KEY, UserID referencing UserID in USER table, DATE, RoomID, PAID_AMOUNT
-cur.execute("CREATE TABLE IF NOT EXISTS TRANSACTION_LOG (LOG_ID TEXT PRIMARY KEY, USER_ID TEXT, ROOM_ID TEXT , DATE TEXT, PAID_AMOUNT TEXT, FOREIGN KEY(USER_ID) REFERENCES USER(USER_ID), FOREIGN KEY(ROOM_ID) REFERENCES ROOM(ROOM_ID))")
+#create TransactionLog table with LogID as KEY, UserID referencing UserID in USER table, RoomID referencing RoomID in ROOM table, DATE_START, DATE_END, , PAID_AMOUNT
+cur.execute("CREATE TABLE IF NOT EXISTS TRANSACTION_LOG (LOG_ID TEXT PRIMARY KEY, USER_ID TEXT, ROOM_ID TEXT , DATE_START TEXT, DATE_END, PAID_AMOUNT TEXT, FOREIGN KEY(USER_ID) REFERENCES USER(USER_ID), FOREIGN KEY(ROOM_ID) REFERENCES ROOM(ROOM_ID))")
 
 #create User_Permission table with UserID referencing UserID in USER table, PermissionID referencing PermissionID in PERMISSION table
 cur.execute("CREATE TABLE IF NOT EXISTS USER_PERMISSION (USER_ID TEXT, PERMISSION_ID TEXT, FOREIGN KEY(USER_ID) REFERENCES USER(USER_ID), FOREIGN KEY(PERMISSION_ID) REFERENCES PERMISSION(PERMISSION_ID))")
@@ -55,7 +56,7 @@ with open(os.path.join(os.path.dirname(__file__), '..', '..', '.github', 'testca
 
 id = 0
 for row in traffic:
-    if id >= 100:
+    if id >= limit:
         break
     else:
         cur.execute("INSERT INTO USER VALUES (?,?,?,?,?,?,?)", (id, row['Name'], row['Phone'], row['Email'], row['Gender'], row['Birthday'], row['Address']))
@@ -84,7 +85,7 @@ with open(os.path.join(os.path.dirname(__file__), '..', '..', '.github', 'testca
 id = 0
 
 for row in traffic:
-    if id >= 100:
+    if id >= limit:
         break
     else:
         #get id of user from username in login_info
