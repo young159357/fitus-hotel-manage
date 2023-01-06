@@ -1,5 +1,6 @@
 import os
 import sqlite3
+import datetime
 
 from pydantic import BaseModel
 
@@ -108,6 +109,13 @@ class Database():
     def get_hotels_info(self) -> dict:
         result = []
 
+        #delete expired log
+        date = datetime.date.today()
+        self.cur.execute("DELETE FROM TRANSACTION_LOG WHERE DATE_END > ? ", (date, ))
+        #get room id existed in log
+        self.cur.execute("SELECT ROOM_ID FROM TRANSACTION_LOG")
+        room_id = self.cur.fetchall()
+
         self.cur.execute(self.QUERY_HOTELS)
         hotels = self.cur.fetchall()
         for hotel in hotels:
@@ -115,18 +123,23 @@ class Database():
             rooms = self.cur.fetchall()
             rooms_list = []
             for room in rooms:
-                furnitures_list = []
-                self.cur.execute(self.QUERY_FURNITURES, (room[0], ))
-                furnitures = list(self.cur.fetchone())
-                if furnitures is not None:
-                    for furniture in furnitures[1:]:
-                        if furniture is not None:
-                            furnitures_list.append(furniture)
-                rooms_list.append(
-                    RoomInfo(RoomID=room[0],
-                             Price=room[2],
-                             BedNums=room[3],
-                             Furnitures=furnitures_list))
+                if room[0] in room_id:
+                    continue
+
+                else:
+                    furnitures_list = []
+                    self.cur.execute(self.QUERY_FURNITURES, (room[0], ))
+                    furnitures = list(self.cur.fetchone())
+                    if furnitures is not None:
+                        for furniture in furnitures[1:]:
+                            if furniture is not None:
+                                furnitures_list.append(furniture)
+                    rooms_list.append(
+                        RoomInfo(RoomID=room[0],
+                                Price=room[2],
+                                BedNums=room[3],
+                                Furnitures=furnitures_list))
+
             result.append(
                 HotelInfo(HotelName=hotel[1],
                           HotelAddress=hotel[2],
@@ -145,12 +158,12 @@ class Database():
         self.cur.execute(self.QUERY_USER_INFO, (username, ))
         user_id = self.cur.fetchone()[0]
 
-        self.cur.execute("SELECT COUNT(*) FROM TRANSACTION_LOG")
+        self.cur.execute("SELECT * FROM TRANSACTION_LOG Order by LOG_ID DESC LIMIT 1")
         row_count = self.cur.fetchone()[0]
 
         self.cur.execute("INSERT INTO TRANSACTION_LOG VALUES (?,?, ?, ?, ?, ?)",
                          (row_count+1, user_id, room_id, start, end, paid))
-                         
+
         self.con.commit()
 
     def close(self):
