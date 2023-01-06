@@ -33,6 +33,19 @@ def login(login_info: LoginInfo, response: Response):
         return
 
 
+@app.get("/users", status_code=200)
+def get_users():
+    return data.get_users()
+
+
+@app.get("/user/{username}", status_code=200)
+def get_user_info(username: str):
+    return {
+        "user_info": data.get_user_info(username),
+        "permissions": data.get_user_permissions(username)
+    }
+
+
 @app.get("/hotels_info", status_code=200)
 def hotels_info():
     return data.get_hotels_info()

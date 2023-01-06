@@ -37,6 +37,8 @@ class Database():
         FROM LOGIN_INFO \
         WHERE USERNAME = ?)"
 
+    QUERY_USERS = "SELECT USERNAME FROM LOGIN_INFO"
+
     QUERY_PERMISSIONS = "SELECT PERMISSION_NAME \
         FROM USER_PERMISSION \
         JOIN PERMISSION \
@@ -81,6 +83,11 @@ class Database():
             return result[0] == password
         else:
             return False
+
+    def get_users(self) -> list:
+        self.cur.execute(self.QUERY_USERS)
+        query = self.cur.fetchall()
+        return [user[0] for user in query]
 
     def get_user_info(self, username: str) -> tuple:
         self.cur.execute(self.QUERY_USER_INFO, (username, ))
@@ -133,7 +140,6 @@ class Database():
         self.cur.execute(self.QUERY_LOG, (user_id, ))
         result = self.cur.fetchall()
         return result
-
 
     def close(self):
         self.con.close()
