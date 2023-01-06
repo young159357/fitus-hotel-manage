@@ -21,6 +21,13 @@ class LoginInfo(BaseModel):
     password: str
 
 
+class BookingInfo(BaseModel):
+    username: str
+    start: str
+    end: str
+    price: str
+
+
 @app.post("/login", status_code=200)
 def login(login_info: LoginInfo, response: Response):
     if data.check_credentials(login_info.username, login_info.password):
@@ -63,3 +70,8 @@ def add_user_schedule(username: str, schedule: ScheduleInfo):
 @app.get("/hotels_info", status_code=200)
 def hotels_info():
     return data.get_hotels_info()
+
+
+@app.post("/book/{room_id}", status_code=200)
+def book_room(room_id: str, info: BookingInfo):
+    data.insert_log(info.username, room_id, info.start, info.end, info.price)

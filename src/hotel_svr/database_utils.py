@@ -134,7 +134,7 @@ class Database():
         self.con.commit()
 
         self.cur.execute("SELECT ROOM_ID FROM TRANSACTION_LOG")
-        room_id = self.cur.fetchall()
+        room_id = [id[0] for id in self.cur.fetchall()]
 
         self.cur.execute(self.QUERY_HOTELS)
         hotels = self.cur.fetchall()
@@ -181,7 +181,11 @@ class Database():
 
         self.cur.execute(
             "SELECT * FROM TRANSACTION_LOG Order by LOG_ID DESC LIMIT 1")
-        row_count = self.cur.fetchone()[0]
+        row_count = self.cur.fetchone()
+        if row_count is not None:
+            row_count = row_count[0]
+        else:
+            row_count = 0
 
         self.cur.execute(
             "INSERT INTO TRANSACTION_LOG VALUES (?,?, ?, ?, ?, ?)",
@@ -200,7 +204,7 @@ class Database():
                         key: schedule[i + 1]
                         for i, key in enumerate(ScheduleInfo.__fields__.keys())
                     }))
-        return schedule
+        return schedule_list
 
     def insert_schedule(self, username: str, date: str, start: str, end: str):
         self.cur.execute(self.QUERY_USER_INFO, (username, ))
