@@ -37,11 +37,13 @@ class Database():
         FROM LOGIN_INFO \
         WHERE USERNAME = ?)"
 
+    QUERY_USERS = "SELECT USERNAME FROM LOGIN_INFO"
+
     QUERY_PERMISSIONS = "SELECT PERMISSION_NAME \
-        FROM USER \
-        JOIN USER_PERMISSION \
+        FROM USER_PERMISSION \
         JOIN PERMISSION \
-        WHERE USER.USER_ID = \
+        ON USER_PERMISSION.PERMISSION_ID = PERMISSION.PERMISSION_ID \
+        WHERE USER_ID = \
         (SELECT USER_ID \
         FROM LOGIN_INFO \
         WHERE USERNAME = ?)"
@@ -60,6 +62,11 @@ class Database():
         WHERE ROOM_ID = ? \
     "
 
+    QUERY_LOG = "SELECT* \
+        FROM TRANSACTION_LOG \
+        WHERE USER_ID = ? \
+    "
+
     def __init__(self, dbname: str):
         # A database should be there, we don't want it to be implicitly created
         if os.path.exists(dbname):
@@ -76,6 +83,11 @@ class Database():
             return result[0] == password
         else:
             return False
+
+    def get_users(self) -> list:
+        self.cur.execute(self.QUERY_USERS)
+        query = self.cur.fetchall()
+        return [user[0] for user in query]
 
     def get_user_info(self, username: str) -> tuple:
         self.cur.execute(self.QUERY_USER_INFO, (username, ))
@@ -120,6 +132,13 @@ class Database():
                           HotelAddress=hotel[2],
                           Rooms=rooms_list))
 
+        return result
+
+    def get_log(self, username: str) -> tuple:
+        self.cur.execute(self.QUERY_USER_INFO, (username, ))
+        user_id = self.cur.fetchone()[0]
+        self.cur.execute(self.QUERY_LOG, (user_id, ))
+        result = self.cur.fetchall()
         return result
 
     def close(self):

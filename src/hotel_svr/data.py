@@ -1,5 +1,6 @@
 import sqlite3, json, os
 
+limit = 100
 con = sqlite3.connect("data.db")
 cur = con.cursor()
 
@@ -12,6 +13,8 @@ cur.execute("DROP TABLE IF EXISTS TRANSACTION_LOG")
 cur.execute("DROP TABLE IF EXISTS USER_PERMISSION")
 cur.execute("DROP TABLE IF EXISTS LOGIN_INFO")
 cur.execute("DROP TABLE IF EXISTS FURNITURE")
+cur.execute("DROP TABLE IF EXISTS SCHEDULE")
+cur.execute("DROP TABLE IF EXISTS FEEDBACK")
 
 # Enable foreign keys
 cur.execute("PRAGMA foreign_keys = ON")
@@ -25,14 +28,14 @@ cur.execute("CREATE TABLE IF NOT EXISTS USER (USER_ID TEXT PRIMARY KEY, NAME TEX
 #create PERMISSION table with PermissionID as KEY, PermissionName
 cur.execute("CREATE TABLE IF NOT EXISTS PERMISSION (PERMISSION_ID TEXT PRIMARY KEY, PERMISSION_NAME TEXT)")
 
-#create ROOM table with RoomID as KEY, HotelID referencing HotelID in HOTEL table, RoomType, RoomPrice, NumOfBeds
-cur.execute("CREATE TABLE IF NOT EXISTS ROOM (ROOM_ID TEXT PRIMARY KEY, HOTEL_ID TEXT, ROOM_PRICE TEXT, NUM_OF_BEDS TEXT, FOREIGN KEY(HOTEL_ID) REFERENCES HOTEL(HOTEL_ID))")
+#create ROOM table with RoomID as KEY, HotelID referencing HotelID in HOTEL table, RoomType, RoomPrice, NumOfBeds, Marking
+cur.execute("CREATE TABLE IF NOT EXISTS ROOM (ROOM_ID TEXT PRIMARY KEY, HOTEL_ID TEXT, ROOM_PRICE REAL, NUM_OF_BEDS INTERGER, MARKING TEXT, FOREIGN KEY(HOTEL_ID) REFERENCES HOTEL(HOTEL_ID))")
 
 #create Furniture table with RoomID referencing RoomID in ROOM table, Furniture_1, Furniture_2, Furniture_3, Furniture_4
 cur.execute("CREATE TABLE IF NOT EXISTS FURNITURE (ROOM_ID TEXT, FURNITURE_1 TEXT, FURNITURE_2 TEXT, FURNITURE_3 TEXT, FURNITURE_4 TEXT, FOREIGN KEY(ROOM_ID) REFERENCES ROOM(ROOM_ID))")
 
-#create TransactionLog table with LogID as KEY, UserID referencing UserID in USER table, DATE, RoomID, PAID_AMOUNT
-cur.execute("CREATE TABLE IF NOT EXISTS TRANSACTION_LOG (LOG_ID TEXT PRIMARY KEY, USER_ID TEXT, ROOM_ID TEXT , DATE TEXT, PAID_AMOUNT TEXT, FOREIGN KEY(USER_ID) REFERENCES USER(USER_ID), FOREIGN KEY(ROOM_ID) REFERENCES ROOM(ROOM_ID))")
+#create TransactionLog table with LogID as KEY, UserID referencing UserID in USER table, RoomID referencing RoomID in ROOM table, DATE_START, DATE_END, , PAID_AMOUNT
+cur.execute("CREATE TABLE IF NOT EXISTS TRANSACTION_LOG (LOG_ID TEXT PRIMARY KEY, USER_ID TEXT, ROOM_ID TEXT , DATE_START TEXT, DATE_END TEXT, PAID_AMOUNT TEXT, FOREIGN KEY(USER_ID) REFERENCES USER(USER_ID), FOREIGN KEY(ROOM_ID) REFERENCES ROOM(ROOM_ID))")
 
 #create User_Permission table with UserID referencing UserID in USER table, PermissionID referencing PermissionID in PERMISSION table
 cur.execute("CREATE TABLE IF NOT EXISTS USER_PERMISSION (USER_ID TEXT, PERMISSION_ID TEXT, FOREIGN KEY(USER_ID) REFERENCES USER(USER_ID), FOREIGN KEY(PERMISSION_ID) REFERENCES PERMISSION(PERMISSION_ID))")
@@ -40,6 +43,11 @@ cur.execute("CREATE TABLE IF NOT EXISTS USER_PERMISSION (USER_ID TEXT, PERMISSIO
 #create Login_Info table with UserID referencing UserID in USER table, Username, Password
 cur.execute("CREATE TABLE IF NOT EXISTS LOGIN_INFO (USER_ID TEXT, USERNAME TEXT, PASSWORD TEXT, FOREIGN KEY(USER_ID) REFERENCES USER(USER_ID))")
 
+#create SCHEDULE table with UserID referencing UserID in USER table, DATE, TIME_START, TIME_END
+cur.execute("CREATE TABLE IF NOT EXISTS SCHEDULE (USER_ID TEXT, DATE TEXT, TIME_START TEXT, TIME_END TEXT, FOREIGN KEY(USER_ID) REFERENCES USER(USER_ID))")
+
+#create Feedback table with UserID referencing UserID in USER table, Feedback
+cur.execute("CREATE TABLE IF NOT EXISTS FEEDBACK (USER_ID TEXT, FEEDBACK TEXT, FOREIGN KEY(USER_ID) REFERENCES USER(USER_ID))")
 
 
 #add data
@@ -55,7 +63,7 @@ with open(os.path.join(os.path.dirname(__file__), '..', '..', '.github', 'testca
 
 id = 0
 for row in traffic:
-    if id >= 100:
+    if id >= limit:
         break
     else:
         cur.execute("INSERT INTO USER VALUES (?,?,?,?,?,?,?)", (id, row['Name'], row['Phone'], row['Email'], row['Gender'], row['Birthday'], row['Address']))
@@ -72,7 +80,7 @@ with open(os.path.join(os.path.dirname(__file__), '..', '..', '.github', 'testca
     traffic = json.load(f)
 
 for row in traffic:
-    cur.execute("INSERT INTO ROOM VALUES (?,?,?,?)", (row['Room'], row['Room'][0], row['Price'], row['BedNum']))
+    cur.execute("INSERT INTO ROOM VALUES (?,?,?,?,?)", (row['Room'], row['Room'][0], row['Price'], row['BedNum'], None))
     Fur = 4*[None]
     for i in range(len(row['InRoom'])):
         Fur[i] = row['InRoom'][i]
@@ -84,7 +92,7 @@ with open(os.path.join(os.path.dirname(__file__), '..', '..', '.github', 'testca
 id = 0
 
 for row in traffic:
-    if id >= 100:
+    if id >= limit:
         break
     else:
         #get id of user from username in login_info
