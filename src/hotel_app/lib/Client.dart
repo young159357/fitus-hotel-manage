@@ -51,8 +51,10 @@ class homeScreen extends StatefulWidget {
 }
 
 class _homeScreen extends State<homeScreen> {
+  List<HotelList>? allData;
   List<HotelList>? hotels;
   var isloaded = false;
+
   @override
   void initState() {
     super.initState();
@@ -60,12 +62,38 @@ class _homeScreen extends State<homeScreen> {
   }
 
   getData() async {
-    hotels = await RemotesService().getRoomList();
+    allData = await RemotesService().getRoomList();
+    hotels = allData;
     if (hotels != null) {
       setState(() {
         isloaded = true;
       });
     }
+  }
+
+  void search(String inputSearch) {
+    List<HotelList>? querry = [];
+    if (inputSearch.isEmpty) {
+      querry = hotels;
+    } else {
+      for (var i = 0; i < hotels!.length; i++) {
+        if (hotels![i]
+                .hotelName
+                .toLowerCase()
+                .contains(inputSearch.toLowerCase()) |
+            hotels![i]
+                .hotelAddress
+                .toLowerCase()
+                .contains(inputSearch.toLowerCase())) ;
+        {
+          querry.add(hotels![i]);
+        }
+      }
+    }
+
+    setState(() {
+      hotels = querry;
+    });
   }
 
   @override
@@ -79,7 +107,7 @@ class _homeScreen extends State<homeScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
-                    onChanged: (value) {},
+                    onChanged: (value) => search(value),
                     decoration: const InputDecoration(
                         labelText: "Search",
                         hintText: "Search",
@@ -110,8 +138,8 @@ class _homeScreen extends State<homeScreen> {
                             ElevatedButton(
                                 onPressed: (() {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        roomListScreen(rooms: hotels![i].rooms),
+                                    builder: (context) => roomListScreen(
+                                        allRooms: hotels![i].rooms),
                                   ));
                                 }),
                                 child: Text("Detail")),
@@ -130,14 +158,44 @@ class _homeScreen extends State<homeScreen> {
 }
 
 class roomListScreen extends StatefulWidget {
-  final List<Room>? rooms;
+  final List<Room>? allRooms;
 
-  const roomListScreen({Key? key, this.rooms}) : super(key: key);
+  const roomListScreen({Key? key, this.allRooms}) : super(key: key);
   @override
   State<roomListScreen> createState() => _roomListScreen();
 }
 
 class _roomListScreen extends State<roomListScreen> {
+  List<Room>? rooms = [];
+  @override
+  void initState() {
+    rooms = widget.allRooms;
+    super.initState();
+  }
+
+  void search(String inputSearch) {
+    List<Room>? querry = [];
+    if (inputSearch.isEmpty) {
+      querry = widget.allRooms;
+    } else {
+      for (var i = 0; i < widget.allRooms!.length; i++) {
+        if (widget.allRooms![i].roomId
+                .toLowerCase()
+                .contains(inputSearch.toLowerCase()) |
+            widget.allRooms![i].price
+                .toLowerCase()
+                .contains(inputSearch.toLowerCase())) ;
+        {
+          querry.add(widget.allRooms![i]);
+        }
+      }
+    }
+
+    setState(() {
+      rooms = querry;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -162,7 +220,7 @@ class _roomListScreen extends State<roomListScreen> {
               ],
             ),
           ),
-          for (int i = 0; i < widget.rooms!.length; i++)
+          for (int i = 0; i < rooms!.length; i++)
             Container(
               height: 200,
               child: Card(
@@ -175,12 +233,13 @@ class _roomListScreen extends State<roomListScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            Text(widget.rooms![i].roomId),
+                            Text(rooms![i].roomId),
+                            Text(rooms![i].price),
                             ElevatedButton(
                                 onPressed: (() {
                                   Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => bookRoomScreen(
-                                      bookRoom: widget.rooms![i],
+                                      bookRoom: rooms![i],
                                     ),
                                   ));
                                 }),
