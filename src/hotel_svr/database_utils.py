@@ -67,6 +67,14 @@ class Database():
         FROM TRANSACTION_LOG \
         WHERE USER_ID = ? \
     "
+    QUERY_SCHEDULE = "SELECT* \
+        FROM SCHEDULE \
+    "
+
+    QUERY_FEEDBACK = "SELECT* \
+        FROM FEEDBACK \
+        WHERE USER_ID = ? \
+    "
 
     def __init__(self, dbname: str):
         # A database should be there, we don't want it to be implicitly created
@@ -110,9 +118,9 @@ class Database():
         result = []
 
         #delete expired log
-        date = datetime.date.today()
-        self.cur.execute("DELETE FROM TRANSACTION_LOG WHERE DATE_END > ? ", (date, ))
-        #get room id existed in log
+        self.cur.execute("DELETE FROM TRANSACTION_LOG WHERE DATE_END > ? ", (datetime.date.today(), ))
+        self.con.commit()
+        
         self.cur.execute("SELECT ROOM_ID FROM TRANSACTION_LOG")
         room_id = self.cur.fetchall()
 
@@ -163,6 +171,36 @@ class Database():
 
         self.cur.execute("INSERT INTO TRANSACTION_LOG VALUES (?,?, ?, ?, ?, ?)",
                          (row_count+1, user_id, room_id, start, end, paid))
+
+        self.con.commit()
+
+    def get_schedule(self) -> tuple:
+        self.cur.execute(self.QUERY_SCHEDULE)
+        result = self.cur.fetchall()
+        return result
+
+    def insert_schedule(self, username: str, date: str, start: str, end: str):
+        self.cur.execute(self.QUERY_USER_INFO, (username, ))
+        user_id = self.cur.fetchone()[0]
+
+        self.cur.execute("INSERT INTO SCHEDULE VALUES (?,?, ?, ?)",
+                         (user_id, date, start, end))
+
+        self.con.commit()
+
+    def get_feedback(self, username: str) -> tuple:
+        self.cur.execute(self.QUERY_USER_INFO, (username, ))
+        user_id = self.cur.fetchone()[0]
+        self.cur.execute(self.QUERY_FEEDBACK, (user_id, ))
+        result = self.cur.fetchall()
+        return result
+    
+    def insert_feedback(self, username: str, feedback: str):
+        self.cur.execute(self.QUERY_USER_INFO, (username, ))
+        user_id = self.cur.fetchone()[0]
+
+        self.cur.execute("INSERT INTO FEEDBACK VALUES (?,?)",
+                         (user_id, feedback))
 
         self.con.commit()
 
