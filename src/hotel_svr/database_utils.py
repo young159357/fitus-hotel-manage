@@ -141,5 +141,17 @@ class Database():
         result = self.cur.fetchall()
         return result
 
+    def insert_log(self, username: str, room_id: str, start: str, end: str, paid: str):
+        self.cur.execute(self.QUERY_USER_INFO, (username, ))
+        user_id = self.cur.fetchone()[0]
+
+        self.cur.execute("SELECT COUNT(*) FROM TRANSACTION_LOG")
+        row_count = self.cur.fetchone()[0]
+
+        self.cur.execute("INSERT INTO TRANSACTION_LOG VALUES (?,?, ?, ?, ?, ?)",
+                         (row_count+1, user_id, room_id, start, end, paid))
+                         
+        self.con.commit()
+
     def close(self):
         self.con.close()
