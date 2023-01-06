@@ -46,5 +46,5 @@ jobs:
       run: cd src/hotel_svr && python3 data.py
       
     - name: Test Server
-      run: cd src/hotel_svr && timeout 30s hypercorn server:app
+      run: cd src/hotel_svr && (timeout 30s hypercorn server:app ||  [[ $? -eq 124 ]])
   
