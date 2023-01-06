@@ -60,6 +60,11 @@ class Database():
         WHERE ROOM_ID = ? \
     "
 
+    QUERY_LOG = "SELECT* \
+        FROM TRANSACTION_LOG \
+        WHERE USER_ID = ? \
+    "
+
     def __init__(self, dbname: str):
         # A database should be there, we don't want it to be implicitly created
         if os.path.exists(dbname):
@@ -121,6 +126,14 @@ class Database():
                           Rooms=rooms_list))
 
         return result
+
+    def get_log(self, username: str) -> tuple:
+        self.cur.execute(self.QUERY_USER_INFO, (username, ))
+        user_id = self.cur.fetchone()[0]
+        self.cur.execute(self.QUERY_LOG, (user_id, ))
+        result = self.cur.fetchall()
+        return result
+
 
     def close(self):
         self.con.close()

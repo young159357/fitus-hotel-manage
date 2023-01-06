@@ -13,6 +13,7 @@ cur.execute("DROP TABLE IF EXISTS TRANSACTION_LOG")
 cur.execute("DROP TABLE IF EXISTS USER_PERMISSION")
 cur.execute("DROP TABLE IF EXISTS LOGIN_INFO")
 cur.execute("DROP TABLE IF EXISTS FURNITURE")
+cur.execute("DROP TABLE IF EXISTS SCHEDULE")
 
 # Enable foreign keys
 cur.execute("PRAGMA foreign_keys = ON")
@@ -26,8 +27,8 @@ cur.execute("CREATE TABLE IF NOT EXISTS USER (USER_ID TEXT PRIMARY KEY, NAME TEX
 #create PERMISSION table with PermissionID as KEY, PermissionName
 cur.execute("CREATE TABLE IF NOT EXISTS PERMISSION (PERMISSION_ID TEXT PRIMARY KEY, PERMISSION_NAME TEXT)")
 
-#create ROOM table with RoomID as KEY, HotelID referencing HotelID in HOTEL table, RoomType, RoomPrice, NumOfBeds
-cur.execute("CREATE TABLE IF NOT EXISTS ROOM (ROOM_ID TEXT PRIMARY KEY, HOTEL_ID TEXT, ROOM_PRICE TEXT, NUM_OF_BEDS TEXT, FOREIGN KEY(HOTEL_ID) REFERENCES HOTEL(HOTEL_ID))")
+#create ROOM table with RoomID as KEY, HotelID referencing HotelID in HOTEL table, RoomType, RoomPrice, NumOfBeds, Marking
+cur.execute("CREATE TABLE IF NOT EXISTS ROOM (ROOM_ID TEXT PRIMARY KEY, HOTEL_ID TEXT, ROOM_PRICE TEXT, NUM_OF_BEDS TEXT, MARKING TEXT, FOREIGN KEY(HOTEL_ID) REFERENCES HOTEL(HOTEL_ID))")
 
 #create Furniture table with RoomID referencing RoomID in ROOM table, Furniture_1, Furniture_2, Furniture_3, Furniture_4
 cur.execute("CREATE TABLE IF NOT EXISTS FURNITURE (ROOM_ID TEXT, FURNITURE_1 TEXT, FURNITURE_2 TEXT, FURNITURE_3 TEXT, FURNITURE_4 TEXT, FOREIGN KEY(ROOM_ID) REFERENCES ROOM(ROOM_ID))")
@@ -40,6 +41,9 @@ cur.execute("CREATE TABLE IF NOT EXISTS USER_PERMISSION (USER_ID TEXT, PERMISSIO
 
 #create Login_Info table with UserID referencing UserID in USER table, Username, Password
 cur.execute("CREATE TABLE IF NOT EXISTS LOGIN_INFO (USER_ID TEXT, USERNAME TEXT, PASSWORD TEXT, FOREIGN KEY(USER_ID) REFERENCES USER(USER_ID))")
+
+#create SCHEDULE table with UserID referencing UserID in USER table, PermissionID referencing PermissionID in PERMISSION table, DATE, TIME_START, TIME_END
+cur.execute("CREATE TABLE IF NOT EXISTS SCHEDULE (USER_ID TEXT, PERMISSION_ID TEXT, DATE TEXT, TIME_START TEXT, TIME_END TEXT, FOREIGN KEY(USER_ID) REFERENCES USER(USER_ID), FOREIGN KEY(PERMISSION_ID) REFERENCES PERMISSION(PERMISSION_ID))")
 
 
 
@@ -73,7 +77,7 @@ with open(os.path.join(os.path.dirname(__file__), '..', '..', '.github', 'testca
     traffic = json.load(f)
 
 for row in traffic:
-    cur.execute("INSERT INTO ROOM VALUES (?,?,?,?)", (row['Room'], row['Room'][0], row['Price'], row['BedNum']))
+    cur.execute("INSERT INTO ROOM VALUES (?,?,?,?,?)", (row['Room'], row['Room'][0], row['Price'], row['BedNum'], None))
     Fur = 4*[None]
     for i in range(len(row['InRoom'])):
         Fur[i] = row['InRoom'][i]
