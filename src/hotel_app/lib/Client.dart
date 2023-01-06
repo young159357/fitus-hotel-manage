@@ -51,24 +51,17 @@ class homeScreen extends StatefulWidget {
 }
 
 class _homeScreen extends State<homeScreen> {
-  List<HotelList>? allData;
   List<HotelList>? hotels;
   var isloaded = false;
 
   @override
   void initState() {
-    super.initState();
     getData();
+    super.initState();
   }
 
   getData() async {
-    allData = await RemotesService().getRoomList();
-    hotels = allData;
-    if (hotels != null) {
-      setState(() {
-        isloaded = true;
-      });
-    }
+    hotels = await RemotesService().getRoomList();
   }
 
   void search(String inputSearch) {
@@ -84,8 +77,7 @@ class _homeScreen extends State<homeScreen> {
             hotels![i]
                 .hotelAddress
                 .toLowerCase()
-                .contains(inputSearch.toLowerCase())) ;
-        {
+                .contains(inputSearch.toLowerCase())) {
           querry.add(hotels![i]);
         }
       }
