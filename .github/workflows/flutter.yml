@@ -42,12 +42,9 @@ jobs:
     - name: Copy Test Files
       run: cp -f .github/testscripts/data_import.py src/hotel_svr/data_import.py
       
-    - name: Move To Test Folder
-      run: cd src/hotel_svr
-      
     - name: Initialize Database
-      run: python3 data.py
+      run: cd src/hotel_svr && python3 data.py
       
     - name: Test Server
-      run: timeout 30s hypercorn server:app
+      run: cd src/hotel_svr && timeout 30s hypercorn server:app
   
