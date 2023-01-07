@@ -176,8 +176,7 @@ class _roomListScreen extends State<roomListScreen> {
                 .contains(inputSearch.toLowerCase()) |
             widget.allRooms![i].price
                 .toLowerCase()
-                .contains(inputSearch.toLowerCase())) ;
-        {
+                .contains(inputSearch.toLowerCase())) {
           querry.add(widget.allRooms![i]);
         }
       }
@@ -199,7 +198,7 @@ class _roomListScreen extends State<roomListScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
-                    onChanged: (value) {},
+                    onChanged: (value) => search(value),
                     decoration: const InputDecoration(
                         labelText: "Search",
                         hintText: "Search",
@@ -295,8 +294,15 @@ class _bookRoomScreen extends State<bookRoomScreen> {
               Container(
                 child: Text("Bed number: " + widget.bookRoom.bedNums),
               ),
+              const Divider(
+                height: 150,
+              ),
               for (int i = 0; i < widget.bookRoom.furnitures.length; i++)
-                Container(child: Text(widget.bookRoom.furnitures[i])),
+                Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.blue),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    child: Text(widget.bookRoom.furnitures[i])),
               // FOR SERVICE
               // CheckboxListTile(
               //   title: Text('Service'),
