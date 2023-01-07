@@ -1,8 +1,10 @@
 // ignore: file_names
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:hotel_app/Admin.dart';
-//import 'package:hotel_app/Staff.dart';
-//import 'package:hotel_app/Client.dart';
+import 'package:hotel_app/Staff.dart';
+import 'package:hotel_app/Client.dart';
 
 import 'package:hotel_app/model/user_list.dart';
 import 'package:hotel_app/service/remote_service.dart';
@@ -120,7 +122,7 @@ class _LoginState extends State<LoginState> {
                   onPressed: () {
                     debugPrint(nameController.text);
                     debugPrint(passwordController.text);
-                    while (!check){
+                    while (!check && number < 100) {
                       if (nameController.text == users![number].username){
                         if (passwordController.text == users![number].password){
                           check = true;
@@ -130,11 +132,70 @@ class _LoginState extends State<LoginState> {
                     }
                     if (check){
                       Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const AdminScreen()),
-                            );
+                        context,
+                        MaterialPageRoute(builder: (context) => const AdminScreen()),
+                      );
                     }
+                    else {
+                      number = 0;
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("Login Failed"),
+                            content: const Text("Please check your username and password"),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text("Close"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                    /*if (nameController.text == 'admin' &&
+                        passwordController.text == 'admin') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AdminScreen()),
+                      );
+                    } else if (nameController.text == 'staff' &&
+                        passwordController.text == 'staff') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const StaffScreen()),
+                      );
+                    } else if (nameController.text == 'client' &&
+                        passwordController.text == 'client') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ClientScreen()),
+                      );
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("Login Failed"),
+                            content: const Text("Please check your username and password"),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text("Close"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }*/
                   }
                 )),
             Row(

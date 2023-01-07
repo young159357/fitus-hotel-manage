@@ -80,6 +80,13 @@ class _AdminScreenState extends State<AdminScreen> {
                     ),
                   ),
                 ),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green),
+                        child: const Icon(Icons.add),
+                        onPressed: () {
+                        }
+              ),
 
               //Staff List
               const SizedBox(
@@ -114,6 +121,13 @@ class _AdminScreenState extends State<AdminScreen> {
                     ),
                   ),
                 ),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green),
+                        child: const Icon(Icons.add),
+                        onPressed: () {
+                        }
+              ),  
             ],
           ),
         ),
@@ -139,6 +153,16 @@ class _AdminScreenState extends State<AdminScreen> {
               },
             ),
             ListTile(
+              leading: const Icon(Icons.apps_outlined),
+              title: const Text('Staff Screen'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => StaffHomePage()),
+                );
+              },
+            ),
+            ListTile(
               leading: const Icon(Icons.account_box),
               title: const Text('Profile'),
               onTap: () {
@@ -156,7 +180,9 @@ class _AdminScreenState extends State<AdminScreen> {
                     context,
                     MaterialPageRoute(builder: (context) => const Login()),
                   );
-                }),
+                }
+            ),
+            
           ],
         ),
       ),
