@@ -27,6 +27,12 @@ class HotelInfo(BaseModel):
     Rooms: list[RoomInfo]
 
 
+class ScheduleInfo(BaseModel):
+    Date: str
+    TimeStart: str
+    TimeEnd: str
+
+
 class Database():
     QUERY_PASSWORD = "SELECT PASSWORD\
         FROM LOGIN_INFO\
@@ -67,8 +73,13 @@ class Database():
         FROM TRANSACTION_LOG \
         WHERE USER_ID = ? \
     "
+
     QUERY_SCHEDULE = "SELECT* \
         FROM SCHEDULE \
+        WHERE USER_ID = \
+        (SELECT USER_ID \
+        FROM LOGIN_INFO \
+        WHERE USERNAME = ?) \
     "
 
     QUERY_FEEDBACK = "SELECT* \
@@ -118,11 +129,12 @@ class Database():
         result = []
 
         #delete expired log
-        self.cur.execute("DELETE FROM TRANSACTION_LOG WHERE DATE_END > ? ", (datetime.date.today(), ))
+        self.cur.execute("DELETE FROM TRANSACTION_LOG WHERE DATE_END > ? ",
+                         (datetime.date.today(), ))
         self.con.commit()
-        
+
         self.cur.execute("SELECT ROOM_ID FROM TRANSACTION_LOG")
-        room_id = self.cur.fetchall()
+        room_id = [id[0] for id in self.cur.fetchall()]
 
         self.cur.execute(self.QUERY_HOTELS)
         hotels = self.cur.fetchall()
@@ -144,9 +156,9 @@ class Database():
                                 furnitures_list.append(furniture)
                     rooms_list.append(
                         RoomInfo(RoomID=room[0],
-                                Price=room[2],
-                                BedNums=room[3],
-                                Furnitures=furnitures_list))
+                                 Price=room[2],
+                                 BedNums=room[3],
+                                 Furnitures=furnitures_list))
 
             result.append(
                 HotelInfo(HotelName=hotel[1],
@@ -162,22 +174,37 @@ class Database():
         result = self.cur.fetchall()
         return result
 
-    def insert_log(self, username: str, room_id: str, start: str, end: str, paid: str):
+    def insert_log(self, username: str, room_id: str, start: str, end: str,
+                   paid: str):
         self.cur.execute(self.QUERY_USER_INFO, (username, ))
         user_id = self.cur.fetchone()[0]
 
-        self.cur.execute("SELECT * FROM TRANSACTION_LOG Order by LOG_ID DESC LIMIT 1")
-        row_count = self.cur.fetchone()[0]
+        self.cur.execute(
+            "SELECT * FROM TRANSACTION_LOG Order by LOG_ID DESC LIMIT 1")
+        row_count = self.cur.fetchone()
+        if row_count is not None:
+            row_count = row_count[0]
+        else:
+            row_count = 0
 
-        self.cur.execute("INSERT INTO TRANSACTION_LOG VALUES (?,?, ?, ?, ?, ?)",
-                         (row_count+1, user_id, room_id, start, end, paid))
+        self.cur.execute(
+            "INSERT INTO TRANSACTION_LOG VALUES (?,?, ?, ?, ?, ?)",
+            (row_count + 1, user_id, room_id, start, end, paid))
 
         self.con.commit()
 
-    def get_schedule(self) -> tuple:
-        self.cur.execute(self.QUERY_SCHEDULE)
+    def get_schedule(self, username) -> list:
+        self.cur.execute(self.QUERY_SCHEDULE, (username, ))
         result = self.cur.fetchall()
-        return result
+        schedule_list = []
+        for schedule in result:
+            schedule_list.append(
+                ScheduleInfo(
+                    **{
+                        key: schedule[i + 1]
+                        for i, key in enumerate(ScheduleInfo.__fields__.keys())
+                    }))
+        return schedule_list
 
     def insert_schedule(self, username: str, date: str, start: str, end: str):
         self.cur.execute(self.QUERY_USER_INFO, (username, ))
@@ -194,7 +221,7 @@ class Database():
         self.cur.execute(self.QUERY_FEEDBACK, (user_id, ))
         result = self.cur.fetchall()
         return result
-    
+
     def insert_feedback(self, username: str, feedback: str):
         self.cur.execute(self.QUERY_USER_INFO, (username, ))
         user_id = self.cur.fetchone()[0]

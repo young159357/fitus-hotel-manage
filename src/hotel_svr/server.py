@@ -1,4 +1,4 @@
-from database_utils import Database
+from database_utils import Database, ScheduleInfo
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -19,6 +19,13 @@ data = Database("data.db")
 class LoginInfo(BaseModel):
     username: str
     password: str
+
+
+class BookingInfo(BaseModel):
+    username: str
+    start: str
+    end: str
+    price: str
 
 
 @app.post("/login", status_code=200)
@@ -46,6 +53,25 @@ def get_user_info(username: str):
     }
 
 
+@app.get("/schedule/{username}", status_code=200)
+def get_user_schedule(username: str):
+    result = data.get_schedule(username)
+    return {
+        "schedule": result,
+    }
+
+
+@app.post("/schedule/{username}", status_code=200)
+def add_user_schedule(username: str, schedule: ScheduleInfo):
+    data.insert_schedule(username, schedule.Date, schedule.TimeStart,
+                         schedule.TimeEnd)
+
+
 @app.get("/hotels_info", status_code=200)
 def hotels_info():
     return data.get_hotels_info()
+
+
+@app.post("/book/{room_id}", status_code=200)
+def book_room(room_id: str, info: BookingInfo):
+    data.insert_log(info.username, room_id, info.start, info.end, info.price)
