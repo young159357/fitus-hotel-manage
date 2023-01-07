@@ -125,6 +125,28 @@ class Database():
         else:
             return ()
 
+
+    def update_permissions(self, username: str, permissions: list[str]):
+        self.cur.execute("DELETE FROM USER_PERMISSION \
+            WHERE USER_ID = \
+            (SELECT USER_ID \
+            FROM LOGIN_INFO \
+            WHERE USERNAME = ?)", (username, ))
+        self.con.commit()
+
+        self.cur.execute(self.QUERY_USER_INFO, (username, ))
+        user_id = self.cur.fetchone()[0]
+
+        for permission in permissions:
+            self.cur.execute("INSERT INTO USER_PERMISSION \
+                VALUES(?, \
+                (SELECT PERMISSION_ID \
+                FROM PERMISSION \
+                WHERE PERMISSION_NAME = ?))",
+                             (user_id, permission))
+            self.con.commit()
+
+
     def get_hotels_info(self) -> dict:
         result = []
 
@@ -230,6 +252,22 @@ class Database():
                          (user_id, feedback))
 
         self.con.commit()
+
+    def mark_room(self, room_id: str):
+        self.cur.execute("SELECT MARKING FROM ROOM WHERE ROOM_ID = ?", 
+                        (room_id, ))
+        marking = self.cur.fetchone()[0]
+
+        if marking:
+            marking = None
+        else:
+            marking = 1
+
+        self.cur.execute("UPDATE ROOM SET MARKING = ? WHERE ROOM_ID = ?", 
+                        (marking, room_id, ))
+
+        self.con.commit()
+    
 
     def close(self):
         self.con.close()
