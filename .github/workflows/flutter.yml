@@ -3,7 +3,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Flutter Test
+name: Testing
 
 on:
   push:
@@ -12,7 +12,8 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  job_1:
+    name: Fluter Build Test
     runs-on: ubuntu-latest
 
     steps:
@@ -26,3 +27,24 @@ jobs:
         
     - name: Build Flutter
       run: cd src/hotel_app && flutter build web
+  
+  job_2:
+    name: Python Back-end Test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      
+    - name: Install Library
+      run: pip install fastapi hypercorn
+      
+    - name: Copy Test Files
+      run: cp -f .github/testscripts/data_import.py src/hotel_svr/data_import.py
+      
+    - name: Initialize Database
+      run: cd src/hotel_svr && python3 data.py
+      
+    - name: Test Server
+      run: cd src/hotel_svr && (timeout 30s hypercorn server:app ||  [[ $? -eq 124 ]])
+  
