@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_app/model/hotel_list.dart';
-import 'package:hotel_app/service/base_client.dart';
+// import 'package:hotel_app/service/base_client.dart';
 import 'package:hotel_app/service/remote_service.dart';
 import './loginScreen.dart';
 import 'dart:async';
@@ -61,7 +61,7 @@ class _homeScreen extends State<homeScreen> {
   }
 
   getData() async {
-    hotels = await RemotesService().getRoomList();
+    hotels = await RemotesService().getHotelList();
   }
 
   void search(String inputSearch) {
@@ -258,9 +258,8 @@ class bookRoomScreen extends StatefulWidget {
 }
 
 class _bookRoomScreen extends State<bookRoomScreen> {
-  // List<bool> temp1 = [false, false, false, false, false];
-
-  bool temp = false;
+  DateTime stdate = DateTime(2023, 1, 1);
+  DateTime eddate = DateTime(2023, 1, 1);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -297,22 +296,52 @@ class _bookRoomScreen extends State<bookRoomScreen> {
               const Divider(
                 height: 150,
               ),
+              Container(
+                child: Text(
+                  '${stdate.day}/${stdate.month}/${stdate.year}',
+                  style: TextStyle(fontSize: 30),
+                ),
+              ),
+              ElevatedButton(
+                  onPressed: () async {
+                    DateTime? newstDate = await showDatePicker(
+                      context: context,
+                      initialDate: stdate,
+                      firstDate: DateTime(2023),
+                      lastDate: DateTime(2100),
+                    );
+                    if (newstDate == null) return;
+                    setState(() {
+                      stdate = newstDate;
+                    });
+                  },
+                  child: Text('Select date')),
+              Container(
+                child: Text(
+                  '${eddate.day}/${eddate.month}/${eddate.year}',
+                  style: TextStyle(fontSize: 30),
+                ),
+              ),
+              ElevatedButton(
+                  onPressed: () async {
+                    DateTime? newedDate = await showDatePicker(
+                      context: context,
+                      initialDate: eddate,
+                      firstDate: DateTime(2023),
+                      lastDate: DateTime(2100),
+                    );
+                    if (newedDate == null) return;
+                    setState(() {
+                      eddate = newedDate;
+                    });
+                  },
+                  child: Text('Select date')),
               for (int i = 0; i < widget.bookRoom.furnitures.length; i++)
                 Container(
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.blue),
                         borderRadius: BorderRadius.all(Radius.circular(20))),
                     child: Text(widget.bookRoom.furnitures[i])),
-              // FOR SERVICE
-              // CheckboxListTile(
-              //   title: Text('Service'),
-              //   value: temp1.elementAt(i),
-              //   onChanged: ((bool? value) {
-              //     setState(() {
-              //       temp1[i] = value!;
-              //     });
-              //   }),
-              // ),
               Container(
                 width: double.infinity,
                 child: ElevatedButton(

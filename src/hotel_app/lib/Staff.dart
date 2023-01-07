@@ -1,6 +1,9 @@
-// ignore: file_names
 import 'package:flutter/material.dart';
+import 'package:hotel_app/model/room_list.dart';
+// import 'package:hotel_app/service/base_client.dart';
+import 'package:hotel_app/service/remote_service.dart';
 import './loginScreen.dart';
+import 'dart:async';
 
 class StaffScreen extends StatelessWidget {
   const StaffScreen({Key? key}) : super(key: key);
@@ -229,8 +232,7 @@ class _profileScreen extends State<profileScreen> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const Login()),
+                      MaterialPageRoute(builder: (context) => const Login()),
                     );
                   },
                   child: const Text("Logout")),

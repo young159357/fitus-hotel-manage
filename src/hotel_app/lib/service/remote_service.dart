@@ -1,9 +1,10 @@
 import 'package:hotel_app/model/hotel_list.dart';
+import 'package:hotel_app/model/room_list.dart';
 import 'package:hotel_app/model/user_list.dart';
 import 'package:http/http.dart' as http;
 
 class RemotesService {
-  Future<List<HotelList>?> getRoomList() async {
+  Future<List<HotelList>?> getHotelList() async {
     var client = http.Client();
     var uri = Uri.parse('http://localhost:8000/hotels_info');
     var response = await client.get(uri);
