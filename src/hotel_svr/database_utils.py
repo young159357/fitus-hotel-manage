@@ -125,6 +125,7 @@ class Database():
         else:
             return ()
 
+
     def update_permissions(self, username: str, permissions: list[str]):
         self.cur.execute("DELETE FROM USER_PERMISSION \
             WHERE USER_ID = \
@@ -133,14 +134,18 @@ class Database():
             WHERE USERNAME = ?)", (username, ))
         self.con.commit()
 
+        self.cur.execute(self.QUERY_USER_INFO, (username, ))
+        user_id = self.cur.fetchone()[0]
+
         for permission in permissions:
             self.cur.execute("INSERT INTO USER_PERMISSION \
                 VALUES(?, \
                 (SELECT PERMISSION_ID \
                 FROM PERMISSION \
                 WHERE PERMISSION_NAME = ?))",
-                             (username, permission))
+                             (user_id, permission))
             self.con.commit()
+
 
     def get_hotels_info(self) -> dict:
         result = []
