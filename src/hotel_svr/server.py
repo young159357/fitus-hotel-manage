@@ -28,6 +28,10 @@ class BookingInfo(BaseModel):
     price: str
 
 
+class Permissions(BaseModel):
+    permissions: list[str]
+
+
 @app.post("/login", status_code=200)
 def login(login_info: LoginInfo, response: Response):
     if data.check_credentials(login_info.username, login_info.password):
@@ -51,6 +55,11 @@ def get_user_info(username: str):
         "user_info": data.get_user_info(username),
         "permissions": data.get_user_permissions(username)
     }
+
+
+@app.post("/user/{username}/permissions", status_code=200)
+def change_permission(username: str, permissions: Permissions):
+    data.update_permissions(username, permissions.permissions)
 
 
 @app.get("/schedule/{username}", status_code=200)
