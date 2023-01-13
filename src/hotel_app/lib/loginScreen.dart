@@ -1,8 +1,10 @@
 // ignore: file_names
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:hotel_app/Admin.dart';
-//import 'package:hotel_app/Staff.dart';
-//import 'package:hotel_app/Client.dart';
+import 'package:hotel_app/Staff.dart';
+import 'package:hotel_app/Client.dart';
 
 import 'package:hotel_app/model/user_list.dart';
 import 'package:hotel_app/service/remote_service.dart';
@@ -36,11 +38,11 @@ class _LoginState extends State<LoginState> {
   TextEditingController passwordController = TextEditingController();
 
   List<UserProfile>? users;
-  var isloaded = false;
-  var check = false;
+  //var isloaded = false;
+  //var check = false;
   int number = 0;
 
-  @override
+  /*@override
   void initState() {
     super.initState();
     getData();
@@ -53,7 +55,7 @@ class _LoginState extends State<LoginState> {
         isloaded = true;
       });
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -120,20 +122,45 @@ class _LoginState extends State<LoginState> {
                   onPressed: () {
                     debugPrint(nameController.text);
                     debugPrint(passwordController.text);
-                    while (!check){
-                      if (nameController.text == users![number].username){
-                        if (passwordController.text == users![number].password){
-                          check = true;
-                        }
-                      }
-                      number++;
-                    }
-                    if (check){
+                    if (nameController.text == 'admin' &&
+                        passwordController.text == 'admin') {
                       Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const AdminScreen()),
-                            );
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AdminScreen()),
+                      );
+                    } else if (nameController.text == 'staff' &&
+                        passwordController.text == 'staff') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const StaffScreen()),
+                      );
+                    } else if (nameController.text == 'client' &&
+                        passwordController.text == 'client') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ClientScreen()),
+                      );
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("Login Failed"),
+                            content: const Text("Please check your username and password"),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text("Close"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     }
                   }
                 )),

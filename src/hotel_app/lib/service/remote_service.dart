@@ -16,8 +16,9 @@ class RemotesService {
 
   Future<List<UserProfile>?> getUserProfile() async {
     var client = http.Client();
-    var uri = Uri.parse(
-        'https://raw.githubusercontent.com/trunghieumickey/fitus-hotel-manage/main/.github/testcases/UsersList.json');
+    /*var uri = Uri.parse(
+        'https://raw.githubusercontent.com/trunghieumickey/fitus-hotel-manage/main/.github/testcases/UsersList.json');*/
+    var uri = Uri.parse('http://localhost:8000/users');
     var response = await client.get(uri);
     if (response.statusCode == 200) {
       var json = response.body;
