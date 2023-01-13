@@ -38,11 +38,11 @@ class _LoginState extends State<LoginState> {
   TextEditingController passwordController = TextEditingController();
 
   List<UserProfile>? users;
-  var isloaded = false;
-  var check = false;
+  //var isloaded = false;
+  //var check = false;
   int number = 0;
 
-  @override
+  /*@override
   void initState() {
     super.initState();
     getData();
@@ -55,7 +55,7 @@ class _LoginState extends State<LoginState> {
         isloaded = true;
       });
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -122,41 +122,7 @@ class _LoginState extends State<LoginState> {
                   onPressed: () {
                     debugPrint(nameController.text);
                     debugPrint(passwordController.text);
-                    while (!check && number < 100) {
-                      if (nameController.text == users![number].username){
-                        if (passwordController.text == users![number].password){
-                          check = true;
-                        }
-                      }
-                      number++;
-                    }
-                    if (check){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const AdminScreen()),
-                      );
-                    }
-                    else {
-                      number = 0;
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text("Login Failed"),
-                            content: const Text("Please check your username and password"),
-                            actions: <Widget>[
-                              TextButton(
-                                child: const Text("Close"),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    }
-                    /*if (nameController.text == 'admin' &&
+                    if (nameController.text == 'admin' &&
                         passwordController.text == 'admin') {
                       Navigator.push(
                         context,
@@ -195,7 +161,7 @@ class _LoginState extends State<LoginState> {
                           );
                         },
                       );
-                    }*/
+                    }
                   }
                 )),
             Row(
