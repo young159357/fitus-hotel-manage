@@ -49,6 +49,18 @@ def get_users():
     return data.get_users()
 
 
+@app.get("/users_info", status_code=200)
+def get_users_info():
+    result = []
+    for user in data.get_users():
+        result.append({
+            "username": user,
+            "user_info": data.get_user_info(user),
+            "permissions": data.get_user_permissions(user)
+        })
+    return result
+
+
 @app.get("/user/{username}", status_code=200)
 def get_user_info(username: str):
     return {
