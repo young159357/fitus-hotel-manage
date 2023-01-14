@@ -56,12 +56,17 @@ class _homeScreen extends State<homeScreen> {
 
   @override
   void initState() {
-    getData();
     super.initState();
+    getData();
   }
 
   getData() async {
     hotels = await RemotesService().getHotelList();
+    if (hotels != null) {
+      setState(() {
+        isloaded = true;
+      });
+    }
   }
 
   void search(String inputSearch) {
