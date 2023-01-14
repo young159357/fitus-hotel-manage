@@ -6,18 +6,29 @@ import 'package:hotel_app/model/user_list.dart';
 import 'package:hotel_app/service/remote_service.dart';
 
 import './Staff.dart';
-import './UserInfo.dart';
+import 'UserInfoPage.dart';
 import './loginScreen.dart';
 import './Client.dart';
 
-class AdminScreen extends StatefulWidget {
+class AdminScreen extends StatelessWidget {
   const AdminScreen({Key? key}) : super(key: key);
-
+  static const String routeName = 'Admin Screen';
   @override
-  State<AdminScreen> createState() => _AdminScreenState();
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      title: routeName,
+      home: AdminScreenPage(),
+    );
+  }
 }
 
-class _AdminScreenState extends State<AdminScreen> {
+class AdminScreenPage extends StatefulWidget {
+  const AdminScreenPage({Key? key}) : super(key: key);
+  @override
+  State<AdminScreenPage> createState() => _AdminScreenState();
+}
+
+class _AdminScreenState extends State<AdminScreenPage> {
   List<UserProfile>? users;
   var isloaded = false;
   var check = false;
@@ -63,19 +74,13 @@ class _AdminScreenState extends State<AdminScreen> {
                 Container(
                   child: Card(
                     child: ListTile(
-                      title: Text(users![i].name),
-                      subtitle: Text(users![i].email),
+                      title: Text(users![i].userInfo.elementAt(0).name), 
+                      subtitle: Text(users![i].userInfo.elementAt(0).email),
                       trailing: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red),
                           child: const Icon(Icons.delete),
                           onPressed: () {
-                            /*persons.removeWhere((element){
-                            return element.id = person.id
-                          });
-                          setState((){
-
-                          });*/
                           }),
                     ),
                   ),
@@ -104,19 +109,13 @@ class _AdminScreenState extends State<AdminScreen> {
                 Container(
                   child: Card(
                     child: ListTile(
-                      title: Text(users![i].name),
-                      subtitle: Text(users![i].email),
+                      title: Text(users![i].userInfo.elementAt(0).name), 
+                      subtitle: Text(users![i].userInfo.elementAt(0).email),
                       trailing: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red),
                           child: const Icon(Icons.delete),
                           onPressed: () {
-                            /*persons.removeWhere((element){
-                            return element.id = person.id
-                          });
-                          setState((){
-
-                          });*/
                           }),
                     ),
                   ),
@@ -168,7 +167,7 @@ class _AdminScreenState extends State<AdminScreen> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const UserInfo()),
+                  MaterialPageRoute(builder: (context) => const UserInfoPage()),
                 );
               },
             ),
