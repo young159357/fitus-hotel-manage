@@ -2,14 +2,14 @@
 import 'package:flutter/material.dart';
 import './Client.dart';
 
-class UserInfo extends StatefulWidget {
-  const UserInfo({Key? key}) : super(key: key);
+class UserInfoPage extends StatefulWidget {
+  const UserInfoPage({Key? key}) : super(key: key);
 
   @override
-  State<UserInfo> createState() => _UserInfoState();
+  State<UserInfoPage> createState() => _UserInfoState();
 }
 
-class _UserInfoState extends State<UserInfo> {
+class _UserInfoState extends State<UserInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
