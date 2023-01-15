@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_app/model/hotel_list.dart';
+import 'package:hotel_app/model/ones_user_list.dart';
 // import 'package:hotel_app/service/base_client.dart';
 import 'package:hotel_app/service/remote_service.dart';
 import './loginScreen.dart';
@@ -369,6 +370,21 @@ class profileScreen extends StatefulWidget {
 }
 
 class _profileScreen extends State<profileScreen> {
+  late OneUserProfile person;
+  var isloaded = false;
+
+    @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    person = await RemotesService().getOneUserProfile("admin");
+    setState(() {
+      isloaded = true;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -395,9 +411,9 @@ class _profileScreen extends State<profileScreen> {
                 color: Colors.grey,
               ),
             ),
-            const Text(
-              'John Doe',
-              style: TextStyle(
+            Text(
+              person.userInfo.elementAt(0).name,
+              style: const TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
@@ -429,9 +445,9 @@ class _profileScreen extends State<profileScreen> {
                 color: Colors.grey,
               ),
             ),
-            const Text(
-              'nls@fitus.edu.vn',
-              style: TextStyle(
+            Text(
+              person.userInfo.elementAt(0).email,
+              style: const TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
@@ -446,9 +462,9 @@ class _profileScreen extends State<profileScreen> {
                 color: Colors.grey,
               ),
             ),
-            const Text(
-              '0123456789',
-              style: TextStyle(
+            Text(
+              person.userInfo.elementAt(0).phone,
+              style: const TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
                 fontSize: 18,

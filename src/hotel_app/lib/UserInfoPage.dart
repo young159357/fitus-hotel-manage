@@ -1,5 +1,7 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
+import 'package:hotel_app/model/ones_user_list.dart';
+import 'package:hotel_app/service/remote_service.dart';
 import './Client.dart';
 
 class UserInfoPage extends StatefulWidget {
@@ -10,6 +12,22 @@ class UserInfoPage extends StatefulWidget {
 }
 
 class _UserInfoState extends State<UserInfoPage> {
+  late OneUserProfile users;
+  var isloaded = false;
+
+    @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    users = await RemotesService().getOneUserProfile("admin");
+    setState(() {
+      isloaded = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,9 +56,9 @@ class _UserInfoState extends State<UserInfoPage> {
                 color: Colors.grey,
               ),
             ),
-            const Text(
-              'John Doe',
-              style: TextStyle(
+            Text(
+              users.userInfo.elementAt(0).name,
+              style: const TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
@@ -68,9 +86,9 @@ class _UserInfoState extends State<UserInfoPage> {
                 color: Colors.grey,
               ),
             ),
-            const Text(
-              'nls@fitus.edu.vn',
-              style: TextStyle(
+            Text(
+              users.userInfo.elementAt(0).email,
+              style: const TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
@@ -83,9 +101,9 @@ class _UserInfoState extends State<UserInfoPage> {
                 color: Colors.grey,
               ),
             ),
-            const Text(
-              '0123456789',
-              style: TextStyle(
+            Text(
+              users.userInfo.elementAt(0).phone,
+              style: const TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
