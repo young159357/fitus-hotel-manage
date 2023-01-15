@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hotel_app/model/room_list.dart';
+import 'package:hotel_app/model/hotel_list.dart';
 // import 'package:hotel_app/service/base_client.dart';
 import 'package:hotel_app/service/remote_service.dart';
 import './loginScreen.dart';
@@ -64,6 +64,48 @@ class homeScreen extends StatefulWidget {
 }
 
 class _homeScreen extends State<homeScreen> {
+  List<HotelList>? hotels;
+  var isloaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    hotels = await RemotesService().getHotelList();
+    if (hotels != null) {
+      setState(() {
+        isloaded = true;
+      });
+    }
+  }
+
+  void search(String inputSearch) {
+    List<HotelList>? querry = [];
+    if (inputSearch.isEmpty) {
+      querry = hotels;
+    } else {
+      for (var i = 0; i < hotels!.length; i++) {
+        if (hotels![i]
+                .hotelName
+                .toLowerCase()
+                .contains(inputSearch.toLowerCase()) |
+            hotels![i]
+                .hotelAddress
+                .toLowerCase()
+                .contains(inputSearch.toLowerCase())) {
+          querry.add(hotels![i]);
+        }
+      }
+    }
+
+    setState(() {
+      hotels = querry;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,47 +117,51 @@ class _homeScreen extends State<homeScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
-                    onChanged: (value) {},
+                    onChanged: (value) => search(value),
                     decoration: const InputDecoration(
                         labelText: "Search",
                         hintText: "Search",
                         prefixIcon: Icon(Icons.search),
                         border: OutlineInputBorder(
                             borderRadius:
-                                BorderRadius.all(Radius.circular(50.0)))),
+                                BorderRadius.all(Radius.circular(25.0)))),
                   ),
                 ),
               ],
             ),
           ),
-          for (int i = 0; i < 5; i++)
-            Container(
-              height: 200,
-              child: Card(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    const Text("Image"),
-                    Expanded(
-                      child: Container(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            const Text("description"),
-                            ElevatedButton(
-                                onPressed: () => Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const detailScreen())),
-                                child: const Text("Edit")),
-                          ],
+          for (int i = 0; i < hotels!.length; i++)
+            for (int j = 0; j < hotels![i].rooms.length; j++)
+              Container(
+                height: 200,
+                child: Card(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Text("Image"),
+                      Expanded(
+                        child: Container(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Text(hotels![i].rooms[j].roomId),
+                              ElevatedButton(
+                                  onPressed: (() {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                      builder: (context) => detailScreen(
+                                          editRoom: hotels![i].rooms[j]),
+                                    ));
+                                  }),
+                                  child: Text("EDIT")),
+                            ],
+                          ),
                         ),
-                      ),
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
         ],
       ),
     );
@@ -293,14 +339,14 @@ class _updateProfileScreen extends State<updateProfileScreen> {
 }
 
 class detailScreen extends StatefulWidget {
-  const detailScreen({Key? key}) : super(key: key);
+  final Room editRoom;
+
+  const detailScreen({Key? key, required this.editRoom}) : super(key: key);
   @override
   State<detailScreen> createState() => _detailScreen();
 }
 
 class _detailScreen extends State<detailScreen> {
-  List<bool> temp1 = [false, false, false, false, false];
-  List<String> temp2 = ["", "", "", "", "", "", ""];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -332,15 +378,12 @@ class _detailScreen extends State<detailScreen> {
               ),
               for (int i = 0; i < 5; i++)
                 TextField(
-                  decoration: InputDecoration(
-                    label: Text('description'),
-                  ),
-                  maxLines: null,
-                  textAlign: TextAlign.left,
-                  onChanged: ((value) {
-                    temp2[i] = value;
-                  }),
-                ),
+                    decoration: InputDecoration(
+                      label: Text('description'),
+                    ),
+                    maxLines: null,
+                    textAlign: TextAlign.left,
+                    onChanged: ((value) {})),
               Container(
                 width: double.infinity,
                 child: ElevatedButton(
