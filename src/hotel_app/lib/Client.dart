@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_app/model/hotel_list.dart';
 import 'package:hotel_app/model/ones_user_list.dart';
-// import 'package:hotel_app/service/base_client.dart';
+import 'package:hotel_app/model/schedule_list.dart';
 import 'package:hotel_app/service/remote_service.dart';
 import './loginScreen.dart';
 import 'dart:async';
@@ -508,11 +508,48 @@ class historyScreen extends StatefulWidget {
 }
 
 class _historyScreen extends State<historyScreen> {
+  List<ScheduleProfile>? schedules;
+  var isloaded = false;
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+  getData() async {
+    schedules = await RemotesService().getScheduleProfile("admin");
+    if (schedules != null) {
+      setState(() {
+        isloaded = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(child: Text("No room history")),
-    );
+    if (isloaded){
+      return Scaffold(
+      body: ListView.builder(
+      itemCount: schedules!.length,
+      itemBuilder: (context, index) {
+        return Card(
+          child: Column(
+            children: <Widget>[
+              Text(schedules![index].date),
+              Text(schedules![index].timeStart),
+              Text(schedules![index].timeEnd),
+            ],
+          ),
+        );
+      },
+    ));
+    }
+    else{
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
   }
 }
 
