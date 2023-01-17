@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hotel_app/model/hotel_list.dart';
 import 'package:hotel_app/model/ones_user_list.dart';
 import 'package:hotel_app/model/schedule_list.dart';
+import 'package:hotel_app/model/bookRoom.dart';
 import 'package:hotel_app/service/remote_service.dart';
 import './loginScreen.dart';
 import 'dart:async';
@@ -351,7 +352,20 @@ class _bookRoomScreen extends State<bookRoomScreen> {
               Container(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    var book = BookRoom(
+                      usename: 'admin',
+                      startDate: stdate.toString(),
+                      endDate: eddate.toString(),
+                      price: widget.bookRoom.price,
+                    );
+                    var response = await RemotesService()
+                        .bookRoom(widget.bookRoom.roomId, book);
+                    if (response == null) return;
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ClientScreen(),
+                    ));
+                  },
                   child: const Text('Book'),
                 ),
               ),
@@ -373,7 +387,7 @@ class _profileScreen extends State<profileScreen> {
   late OneUserProfile person;
   var isloaded = false;
 
-    @override
+  @override
   void initState() {
     super.initState();
     getData();
@@ -385,6 +399,7 @@ class _profileScreen extends State<profileScreen> {
       isloaded = true;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -515,6 +530,7 @@ class _historyScreen extends State<historyScreen> {
     super.initState();
     getData();
   }
+
   getData() async {
     schedules = await RemotesService().getScheduleProfile("admin");
     if (schedules != null) {
@@ -526,24 +542,23 @@ class _historyScreen extends State<historyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (isloaded){
+    if (isloaded) {
       return Scaffold(
-      body: ListView.builder(
-      itemCount: schedules!.length,
-      itemBuilder: (context, index) {
-        return Card(
-          child: Column(
-            children: <Widget>[
-              Text(schedules![index].date),
-              Text(schedules![index].timeStart),
-              Text(schedules![index].timeEnd),
-            ],
-          ),
-        );
-      },
-    ));
-    }
-    else{
+          body: ListView.builder(
+        itemCount: schedules!.length,
+        itemBuilder: (context, index) {
+          return Card(
+            child: Column(
+              children: <Widget>[
+                Text(schedules![index].date),
+                Text(schedules![index].timeStart),
+                Text(schedules![index].timeEnd),
+              ],
+            ),
+          );
+        },
+      ));
+    } else {
       return const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
