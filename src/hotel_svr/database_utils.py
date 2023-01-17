@@ -1,6 +1,6 @@
+import datetime
 import os
 import sqlite3
-import datetime
 
 from pydantic import BaseModel
 
@@ -19,6 +19,7 @@ class RoomInfo(BaseModel):
     Price: str
     BedNums: str
     Furnitures: list[str]
+    Available: bool
 
 
 class HotelInfo(BaseModel):
@@ -125,9 +126,9 @@ class Database():
         else:
             return ()
 
-
     def update_permissions(self, username: str, permissions: list[str]):
-        self.cur.execute("DELETE FROM USER_PERMISSION \
+        self.cur.execute(
+            "DELETE FROM USER_PERMISSION \
             WHERE USER_ID = \
             (SELECT USER_ID \
             FROM LOGIN_INFO \
@@ -138,14 +139,13 @@ class Database():
         user_id = self.cur.fetchone()[0]
 
         for permission in permissions:
-            self.cur.execute("INSERT INTO USER_PERMISSION \
+            self.cur.execute(
+                "INSERT INTO USER_PERMISSION \
                 VALUES(?, \
                 (SELECT PERMISSION_ID \
                 FROM PERMISSION \
-                WHERE PERMISSION_NAME = ?))",
-                             (user_id, permission))
+                WHERE PERMISSION_NAME = ?))", (user_id, permission))
             self.con.commit()
-
 
     def get_hotels_info(self) -> dict:
         result = []
@@ -167,7 +167,6 @@ class Database():
             for room in rooms:
                 if room[0] in room_id:
                     continue
-
                 else:
                     furnitures_list = []
                     self.cur.execute(self.QUERY_FURNITURES, (room[0], ))
@@ -177,10 +176,12 @@ class Database():
                             if furniture is not None:
                                 furnitures_list.append(furniture)
                     rooms_list.append(
-                        RoomInfo(RoomID=room[0],
-                                 Price=room[2],
-                                 BedNums=room[3],
-                                 Furnitures=furnitures_list))
+                        RoomInfo(
+                            RoomID=room[0],
+                            Price=room[2],
+                            BedNums=room[3],
+                            Furnitures=furnitures_list,
+                            Available=(True if room[4] is None else False)))
 
             result.append(
                 HotelInfo(HotelName=hotel[1],
@@ -254,8 +255,8 @@ class Database():
         self.con.commit()
 
     def mark_room(self, room_id: str):
-        self.cur.execute("SELECT MARKING FROM ROOM WHERE ROOM_ID = ?", 
-                        (room_id, ))
+        self.cur.execute("SELECT MARKING FROM ROOM WHERE ROOM_ID = ?",
+                         (room_id, ))
         marking = self.cur.fetchone()[0]
 
         if marking:
@@ -263,11 +264,12 @@ class Database():
         else:
             marking = 1
 
-        self.cur.execute("UPDATE ROOM SET MARKING = ? WHERE ROOM_ID = ?", 
-                        (marking, room_id, ))
+        self.cur.execute("UPDATE ROOM SET MARKING = ? WHERE ROOM_ID = ?", (
+            marking,
+            room_id,
+        ))
 
         self.con.commit()
-    
 
     def close(self):
         self.con.close()

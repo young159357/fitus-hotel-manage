@@ -96,3 +96,8 @@ def hotels_info():
 @app.post("/book/{room_id}", status_code=200)
 def book_room(room_id: str, info: BookingInfo):
     data.insert_log(info.username, room_id, info.start, info.end, info.price)
+
+
+@app.post("/status/{room_id}", status_code=200)
+def change_availability(room_id: str):
+    data.mark_room(room_id)
