@@ -58,6 +58,7 @@ class _scheduleScreen extends State<scheduleScreen> {
     super.initState();
     getData();
   }
+
   getData() async {
     schedules = await RemotesService().getScheduleProfile("admin");
     if (schedules != null) {
@@ -69,24 +70,23 @@ class _scheduleScreen extends State<scheduleScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (isloaded){
+    if (isloaded) {
       return Scaffold(
-      body: ListView.builder(
-      itemCount: schedules!.length,
-      itemBuilder: (context, index) {
-        return Card(
-          child: Column(
-            children: <Widget>[
-              Text(schedules![index].date),
-              Text(schedules![index].timeStart),
-              Text(schedules![index].timeEnd),
-            ],
-          ),
-        );
-      },
-    ));
-    }
-    else{
+          body: ListView.builder(
+        itemCount: schedules!.length,
+        itemBuilder: (context, index) {
+          return Card(
+            child: Column(
+              children: <Widget>[
+                Text(schedules![index].date),
+                Text(schedules![index].timeStart),
+                Text(schedules![index].timeEnd),
+              ],
+            ),
+          );
+        },
+      ));
+    } else {
       return const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
@@ -216,10 +216,10 @@ class profileScreen extends StatefulWidget {
 }
 
 class _profileScreen extends State<profileScreen> {
-late OneUserProfile person;
+  late OneUserProfile person;
   var isloaded = false;
 
-    @override
+  @override
   void initState() {
     super.initState();
     getData();
@@ -231,6 +231,7 @@ late OneUserProfile person;
       isloaded = true;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -431,14 +432,13 @@ class _detailScreen extends State<detailScreen> {
               Container(
                 child: Text('description'),
               ),
-              for (int i = 0; i < 5; i++)
-                TextField(
-                    decoration: InputDecoration(
-                      label: Text('description'),
-                    ),
-                    maxLines: null,
-                    textAlign: TextAlign.left,
-                    onChanged: ((value) {})),
+              TextField(
+                  decoration: InputDecoration(
+                    label: Text('Status'),
+                  ),
+                  maxLines: null,
+                  textAlign: TextAlign.left,
+                  onChanged: ((value) {})),
               Container(
                 width: double.infinity,
                 child: ElevatedButton(
