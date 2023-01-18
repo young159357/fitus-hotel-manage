@@ -58,4 +58,15 @@ class RemotesService {
       return response.body;
     }
   }
+
+  Future<dynamic> updateRoom(String api, dynamic object) async {
+    var client = http.Client();
+    var url = Uri.parse('http://localhost:8000/status/' + api);
+    var payload = json.encode(object);
+
+    var response = await client.post(url, body: payload);
+    if (response.statusCode == 200) {
+      return response.body;
+    }
+  }
 }

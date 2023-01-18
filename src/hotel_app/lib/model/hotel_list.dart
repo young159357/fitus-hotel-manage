@@ -40,18 +40,21 @@ class Room {
     required this.price,
     required this.bedNums,
     required this.furnitures,
+    required this.available,
   });
 
   String roomId;
   String price;
   String bedNums;
   List<String> furnitures;
+  bool available;
 
   factory Room.fromJson(Map<String, dynamic> json) => Room(
         roomId: json["RoomID"],
         price: json["Price"],
         bedNums: json["BedNums"],
         furnitures: List<String>.from(json["Furnitures"].map((x) => x)),
+        available: json["Available"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -59,5 +62,6 @@ class Room {
         "Price": price,
         "BedNums": bedNums,
         "Furnitures": List<dynamic>.from(furnitures.map((x) => x)),
+        "Available": available,
       };
 }

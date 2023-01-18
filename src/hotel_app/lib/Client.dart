@@ -300,55 +300,74 @@ class _bookRoomScreen extends State<bookRoomScreen> {
               Container(
                 child: Text("Bed number: " + widget.bookRoom.bedNums),
               ),
-              const Divider(
-                height: 150,
-              ),
               Container(
-                child: Text(
-                  '${stdate.day}/${stdate.month}/${stdate.year}',
-                  style: TextStyle(fontSize: 30),
-                ),
+                child: Text("Room's feature: "),
               ),
-              ElevatedButton(
-                  onPressed: () async {
-                    DateTime? newstDate = await showDatePicker(
-                      context: context,
-                      initialDate: stdate,
-                      firstDate: DateTime(2023),
-                      lastDate: DateTime(2100),
-                    );
-                    if (newstDate == null) return;
-                    setState(() {
-                      stdate = newstDate;
-                    });
-                  },
-                  child: Text('Select date')),
-              Container(
-                child: Text(
-                  '${eddate.day}/${eddate.month}/${eddate.year}',
-                  style: TextStyle(fontSize: 30),
-                ),
-              ),
-              ElevatedButton(
-                  onPressed: () async {
-                    DateTime? newedDate = await showDatePicker(
-                      context: context,
-                      initialDate: eddate,
-                      firstDate: DateTime(2023),
-                      lastDate: DateTime(2100),
-                    );
-                    if (newedDate == null) return;
-                    setState(() {
-                      eddate = newedDate;
-                    });
-                  },
-                  child: Text('Select date')),
               for (int i = 0; i < widget.bookRoom.furnitures.length; i++)
                 Container(
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.blue),
                         borderRadius: BorderRadius.all(Radius.circular(20))),
                     child: Text(widget.bookRoom.furnitures[i])),
+              const Divider(
+                height: 100,
+              ),
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Column(children: <Widget>[
+                      Container(
+                        child: Text(
+                          'Start\n' +
+                              '${stdate.day}/${stdate.month}/${stdate.year}',
+                          style: TextStyle(fontSize: 30),
+                        ),
+                      ),
+                      ElevatedButton(
+                          onPressed: () async {
+                            DateTime? newstDate = await showDatePicker(
+                              context: context,
+                              initialDate: stdate,
+                              firstDate: DateTime(2023),
+                              lastDate: DateTime(2100),
+                            );
+                            if (newstDate == null) return;
+                            setState(() {
+                              stdate = newstDate;
+                            });
+                          },
+                          child: Text('Select date')),
+                    ]),
+                    Column(children: <Widget>[
+                      Container(
+                        child: Text(
+                          'End\n' +
+                              '${eddate.day}/${eddate.month}/${eddate.year}',
+                          style: TextStyle(fontSize: 30),
+                        ),
+                      ),
+                      ElevatedButton(
+                          onPressed: () async {
+                            DateTime? newedDate = await showDatePicker(
+                              context: context,
+                              initialDate: eddate,
+                              firstDate: DateTime(2023),
+                              lastDate: DateTime(2100),
+                            );
+                            if (newedDate == null) return;
+                            setState(() {
+                              eddate = newedDate;
+                            });
+                          },
+                          child: Text('Select date')),
+                    ]),
+                  ],
+                ),
+              ),
+              const Divider(
+                height: 50,
+              ),
               Container(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -363,7 +382,7 @@ class _bookRoomScreen extends State<bookRoomScreen> {
                         .bookRoom(widget.bookRoom.roomId, book);
                     if (response == null) return;
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ClientScreen(),
+                      builder: (context) => homeScreen(),
                     ));
                   },
                   child: const Text('Book'),
