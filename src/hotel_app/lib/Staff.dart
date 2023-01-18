@@ -8,7 +8,7 @@ import 'dart:async';
 
 class StaffScreen extends StatelessWidget {
   const StaffScreen({Key? key}) : super(key: key);
-  static const String routeName = '/StaffScreen';
+  static const String routeName = 'Staff Screen';
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -408,7 +408,7 @@ class _detailScreen extends State<detailScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: Text("Room"),
+        title: Text(widget.editRoom.roomId),
       ),
       body: Center(
         child: Container(
@@ -430,19 +430,65 @@ class _detailScreen extends State<detailScreen> {
                     )),
               ),
               Container(
-                child: Text('description'),
+                child:
+                    Text("Price: " + widget.editRoom.price + r" $ Per Night"),
               ),
-              TextField(
-                  decoration: InputDecoration(
-                    label: Text('Status'),
-                  ),
-                  maxLines: null,
-                  textAlign: TextAlign.left,
-                  onChanged: ((value) {})),
+              Container(
+                child: Text("Bed number: " + widget.editRoom.bedNums),
+              ),
+              Container(
+                child: Text("Room's feature: "),
+              ),
+              for (int i = 0; i < widget.editRoom.furnitures.length; i++)
+                Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.blue),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    child: Text(widget.editRoom.furnitures[i])),
+              const Divider(
+                height: 50,
+              ),
+              Container(
+                child: Text("Availablility"),
+              ),
+              ListTile(
+                title: const Text('True'),
+                leading: Radio(
+                  value: true,
+                  groupValue: widget.editRoom.available,
+                  onChanged: (value) {
+                    setState(() {
+                      widget.editRoom.available = value!;
+                    });
+                  },
+                ),
+              ),
+              ListTile(
+                title: const Text('False'),
+                leading: Radio(
+                  value: false,
+                  groupValue: widget.editRoom.available,
+                  onChanged: (value) {
+                    setState(() {
+                      widget.editRoom.available = value!;
+                    });
+                  },
+                ),
+              ),
+              const Divider(
+                height: 50,
+              ),
               Container(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    var response = await RemotesService().bookRoom(
+                        widget.editRoom.roomId, widget.editRoom.roomId);
+                    if (response == null) return;
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => homeScreen(),
+                    ));
+                  },
                   child: const Text('Update'),
                 ),
               ),
