@@ -380,7 +380,6 @@ class _bookRoomScreen extends State<bookRoomScreen> {
                     );
                     var response = await RemotesService()
                         .bookRoom(widget.bookRoom.roomId, book);
-                    if (response == null) return;
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => homeScreen(),
                     ));

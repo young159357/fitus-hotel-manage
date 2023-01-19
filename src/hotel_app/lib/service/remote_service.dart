@@ -54,9 +54,6 @@ class RemotesService {
     var payload = json.encode(object);
 
     var response = await client.post(url, body: payload);
-    if (response.statusCode == 200) {
-      return response.body;
-    }
   }
 
   Future<dynamic> updateRoom(String api, dynamic object) async {
@@ -65,8 +62,5 @@ class RemotesService {
     var payload = json.encode(object);
 
     var response = await client.post(url, body: payload);
-    if (response.statusCode == 200) {
-      return response.body;
-    }
   }
 }

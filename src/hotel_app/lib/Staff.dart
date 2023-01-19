@@ -482,9 +482,8 @@ class _detailScreen extends State<detailScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
-                    var response = await RemotesService().bookRoom(
+                    var response = await RemotesService().updateRoom(
                         widget.editRoom.roomId, widget.editRoom.roomId);
-                    if (response == null) return;
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => homeScreen(),
                     ));
